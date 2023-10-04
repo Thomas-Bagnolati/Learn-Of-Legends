@@ -118,9 +118,9 @@ class ChampionsViewModel @Inject constructor(
     }
 
     /**
-     * Order a list of [Champion] by [ChampionOrder]
+     * Order a list of [Champion] by [ChampionOrder].
      *
-     * @return new List of [Champion] ordered
+     * @return new List of [Champion] ordered.
      */
     private fun List<Champion>.orderChampions(order: ChampionOrder): List<Champion> {
         return this

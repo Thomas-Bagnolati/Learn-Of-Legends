@@ -200,8 +200,6 @@ private fun ChampionOrderSectionPreview() {
     }
 }
 
-// TODO : May move refactor this part, may move this to an other layer / file ?
-
 /**
  * Data representation of Order of a [Champion].
  */
@@ -237,7 +235,7 @@ enum class ChampionOrder(
  *
  * @param order The [ChampionOrder] to know witch value to return.
  * @param indexOnList The index of champion on list to retrieve the [ALPHABETIC] position,
- * set it at null if don't care about ALPHABETIC stat.
+ * set it at null if  don't care about ALPHABETIC stat.
  */
 internal fun Champion.getStatByOrderAsString(order: ChampionOrder, indexOnList: Int? = null): String {
     return when (order) {
@@ -265,6 +263,12 @@ internal fun Champion.getStatByOrderAsString(order: ChampionOrder, indexOnList: 
     }
 }
 
+/**
+ * Retrieve stat from a [ChampionOrder] as Double. It's functionality
+ * as to purpose to help as playing with data with same types of values.
+ *
+ * @param order will determine with value to return.
+ */
 internal fun Champion.getStatByOrderAsDouble(order: ChampionOrder): Double {
     return when (order) {
         ALPHABETIC -> 0.0 // Don't want to show stats for this order.
@@ -290,7 +294,6 @@ internal fun Champion.getStatByOrderAsDouble(order: ChampionOrder): Double {
         ATTACK_SPEED_LVL -> stats.attackSpeedPerLevel
     }
 }
-
 
 /**
  * Return champion position on list as String.
