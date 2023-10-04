@@ -29,11 +29,14 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Build app bundle
+#      - name: Build app Apk
+#        run: ./gradlew :app:assembleRelease
+
+      - name: Build app Bundle
         id: buildRelease
         run: ./gradlew :app:bundleRelease
 
-      - name: Sign app
+      - name: Sign app Bundle
         uses: r0adkll/sign-android-release@v1
         id: sign_app
         with:
@@ -45,20 +48,11 @@ jobs:
         env:
           BUILD_TOOLS_VERSION: "34.0.0"
 
-      #      - name: Create Release
-      #        id: create_release
-      #        uses: actions/create-release@v1
-      #        env:
-      #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #        with:
-      #          tag_name: ${{ github.ref }}
-      #          release_name: ${{ github.ref }}
-      #          draft: false
-      #          prerelease: false
-
-      - name: Get app version
-        id: get_version
-        uses: eriknyk/android-get-app-version-action@v1.0.1
+      - name: Expose version name
+        uses: michpohl/android-expose-version-name-action@v1.0.0
+        with:
+          expose-version-name: 'true'
+          expose-version-code: 'false'
 
       - name: Create Release
         id: create_release
@@ -66,16 +60,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: '${{ steps.get_version.outputs.versionName }}'
-          release_name: 'Release ${{ steps.get_version.outputs.versionName }}'
-          draft: false
+          tag_name: ${{ env.ANDROID_VERSION_NAME }}
+          release_name: ${{ env.ANDROID_VERSION_NAME }}
+          draft: true
           prerelease: false
+          files: |
+            app/build/outputs/apk/**/*.apk
+            app/build/outputs/bundle/**/*.aab
 
-      - name: Upload app
-        uses: actions/upload-artifact@v2
-        with:
-          name: Signed app bundle
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+#      - name: Upload app
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: Signed app bundle
+#          path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
 #      - name: Deploy to Play Store
 #        uses: r0adkll/upload-google-play@v1
@@ -83,4 +80,4 @@ jobs:
 #          serviceAccountJsonPlainText: ${{secrets.SERVICE_ACCOUNT}}
 #          packageName: com.bagnolati.learnoflegends
 #          releaseFiles: app/build/outputs/bundle/release/app-release.aab
-#          track: production
+#          track: internal
