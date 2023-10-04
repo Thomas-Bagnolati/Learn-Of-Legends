@@ -29,18 +29,6 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: true
-          prerelease: false
-
       - name: Build app bundle
         id: buildRelease
         run: ./gradlew :app:bundleRelease
@@ -57,17 +45,38 @@ jobs:
         env:
           BUILD_TOOLS_VERSION: "34.0.0"
 
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: true
+          prerelease: false
+
       - name: Upload app
         uses: actions/upload-artifact@v2
         with:
-          name: Signed app bundle
+          name: app-bundle
           path: ${{ steps.sign_app.outputs.signedReleaseFile }}
 
-      - name: Deploy to Play Store
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download app bundle from artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: app-bundle
+
+      - name: Publish to Play Store
         uses: r0adkll/upload-google-play@v1
         with:
           serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           packageName: com.bagnolati.learnoflegends
-          releaseFiles: app/build/outputs/bundle/release/app-release.aab
-          track: internal
-          status: draft
+          releaseFiles: app-release.aab
+          track: alpha
