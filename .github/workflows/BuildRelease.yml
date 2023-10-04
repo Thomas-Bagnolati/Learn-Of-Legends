@@ -32,7 +32,7 @@ jobs:
 #      - name: Build app bundle
 #        id: buildRelease
 #        run: ./gradlew :app:bundleRelease
-
+#
 #      - name: Sign app
 #        uses: r0adkll/sign-android-release@v1
 #        id: sign_app
@@ -49,6 +49,9 @@ jobs:
         run: |
           echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q appVersionName)"
         id: android_version
+
+      - name: Print Version
+        run: echo Release - ${{env.version_name}}
 
 #      - name: Create Release on Github
 #        uses: softprops/action-gh-release@v1
