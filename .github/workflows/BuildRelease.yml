@@ -2,8 +2,11 @@ name: GitHub Release
 
 on:
   push:
+    branches:
+      - main
+      - github_action_workflow
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   build:
