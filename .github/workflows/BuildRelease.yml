@@ -33,36 +33,6 @@ jobs:
         id: buildRelease
         run: ./gradlew :app:bundleRelease
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: true
-          prerelease: false
-
-      - name: Upload app
-        uses: actions/upload-artifact@v2
-        with:
-          name: app-bundle
-          path: app/build/outputs/bundle/debug/app-release.aab
-#          path: ${{ steps.sign_app.outputs.signedReleaseFile }}
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Download app bundle from artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: app-bundle
-          path: app/build/outputs/bundle/debug/app-release.aab
-
       - name: Sign app
         uses: r0adkll/sign-android-release@v1
         id: sign_app
@@ -74,6 +44,36 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
         env:
           BUILD_TOOLS_VERSION: "34.0.0"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: true
+          prerelease: false
+      
+      # TODO: Don't share signed build
+      - name: Upload app
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-bundle
+          path: ${{ steps.sign_app.outputs.signedReleaseFile }}
+
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download app bundle from artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app-bundle
 
       - name: Publish to Play Store
         uses: r0adkll/upload-google-play@v1
