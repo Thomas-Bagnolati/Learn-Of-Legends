@@ -29,51 +29,54 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-#      - name: Build app Apk
-#        run: ./gradlew :app:assembleRelease
+      - name: Build app bundle
+        id: buildRelease
+        run: ./gradlew :app:bundleRelease
 
-#      - name: Build app Bundle
-#        id: buildRelease
-#        run: ./gradlew :app:bundleRelease
-#
-#      - name: Sign app Bundle
-#        uses: r0adkll/sign-android-release@v1
-#        id: sign_app
-#        with:
-#          releaseDirectory: app/build/outputs/bundle/release
-#          signingKeyBase64: ${{ secrets.KEY_STORE_BASE64 }}
-#          alias: ${{ secrets.ALIAS }}
-#          keyStorePassword: ${{ secrets.STORE_PASSWORD }}
-#          keyPassword: ${{ secrets.KEY_PASSWORD }}
-#        env:
-#          BUILD_TOOLS_VERSION: "34.0.0"
-
-      - name: Expose version name
-        uses: michpohl/android-expose-version-name-action@v1.0.0
+      - name: Sign app
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
         with:
-          path : 'build.gradle.kts'
-          expose-version-name: 'true'
-          expose-version-code: 'false'
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.KEY_STORE_BASE64 }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"
 
-#      - name: Create Release
-#        id: create_release
-#        uses: actions/create-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          tag_name: ${{ env.ANDROID_VERSION_NAME }}
-#          release_name: ${{ env.ANDROID_VERSION_NAME }}
-#          draft: true
-#          prerelease: false
-#          files: |
-#            app/build/outputs/apk/**/*.apk
-#            app/build/outputs/bundle/**/*.aab
+      #      - name: Create Release
+      #        id: create_release
+      #        uses: actions/create-release@v1
+      #        env:
+      #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #        with:
+      #          tag_name: ${{ github.ref }}
+      #          release_name: ${{ github.ref }}
+      #          draft: false
+      #          prerelease: false
 
-#      - name: Upload app
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: Signed app bundle
-#          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+      - name: Retrieve Version
+        run: |
+          echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q appVersionName)"
+        id: android_version
+
+      - name: Create Release on Github
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{env.version_name}}
+          name: Release - ${{env.version_name}}
+          generate_release_notes: true
+          prerelease: true
+      #          files: app/build/outputs/bundle/<<yourAppName>>/<<YourAppNameAndVariant>>.aab
+
+      - name: Upload app
+        uses: actions/upload-artifact@v2
+        with:
+          name: Signed app bundle
+          path: ${{steps.sign_app.outputs.signedReleaseFile}}
 
 #      - name: Deploy to Play Store
 #        uses: r0adkll/upload-google-play@v1
@@ -81,4 +84,4 @@ jobs:
 #          serviceAccountJsonPlainText: ${{secrets.SERVICE_ACCOUNT}}
 #          packageName: com.bagnolati.learnoflegends
 #          releaseFiles: app/build/outputs/bundle/release/app-release.aab
-#          track: internal
+#          track: production
