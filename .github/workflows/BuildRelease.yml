@@ -45,16 +45,32 @@ jobs:
         env:
           BUILD_TOOLS_VERSION: "34.0.0"
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+      #      - name: Create Release
+      #        id: create_release
+      #        uses: actions/create-release@v1
+      #        env:
+      #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #        with:
+      #          tag_name: ${{ github.ref }}
+      #          release_name: ${{ github.ref }}
+      #          draft: false
+      #          prerelease: false
+
+      - name: Retrieve Version
+        run: |
+          echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q appVersionName)"
+        id: android_version
+
+      - name: Create Release on Github
+        uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: false
-          prerelease: false
+          tag_name: v${{env.version_name}}
+          name: Release - ${{env.version_name}}
+          generate_release_notes: true
+          prerelease: true
+#          files: app/build/outputs/bundle/<<yourAppName>>/<<YourAppNameAndVariant>>.aab
 
       - name: Upload app
         uses: actions/upload-artifact@v2
