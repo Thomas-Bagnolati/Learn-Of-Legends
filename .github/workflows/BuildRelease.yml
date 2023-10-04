@@ -29,6 +29,18 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: true
+          prerelease: false
+
 #      - name: Build app bundle
 #        id: buildRelease
 #        run: ./gradlew :app:bundleRelease
@@ -44,25 +56,6 @@ jobs:
 #          keyPassword: ${{ secrets.KEY_PASSWORD }}
 #        env:
 #          BUILD_TOOLS_VERSION: "34.0.0"
-
-      - name: Retrieve Version
-        run: |
-          echo "::set-output name=VERSION_NAME::$(${{github.workspace}}/gradlew -q appVersionName)"
-        id: android_version
-
-      - name: Print Version
-        run: echo Release - ${{env.version_name}}
-
-#      - name: Create Release on Github
-#        uses: softprops/action-gh-release@v1
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          tag_name: v${{env.version_name}}
-#          name: Release - ${{env.version_name}}
-#          generate_release_notes: true
-#          prerelease: true
-      #          files: app/build/outputs/bundle/<<yourAppName>>/<<YourAppNameAndVariant>>.aab
 
 #      - name: Upload app
 #        uses: actions/upload-artifact@v2
