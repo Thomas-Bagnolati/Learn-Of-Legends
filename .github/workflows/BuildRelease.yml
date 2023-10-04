@@ -41,13 +41,13 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: app-apk
-          paths: app/build/outputs/apk/release/
+          path: app/build/outputs/apk/release/
 
       - name: Upload app Bundle
         uses: actions/upload-artifact@v3
         with:
           name: app-bundle
-          paths: app/build/outputs/bundle/release/
+          path: app/build/outputs/bundle/release/
 
       - name: Create Release
         uses: softprops/action-gh-release@v1
