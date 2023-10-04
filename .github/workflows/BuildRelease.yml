@@ -29,9 +29,6 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Grant rights
-        run: chmod +x build.gradle
-
       - name: Build app bundle
         id: buildRelease
         run: ./gradlew :app:bundleRelease
