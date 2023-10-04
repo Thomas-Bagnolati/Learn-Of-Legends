@@ -29,50 +29,27 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Build app Apk
-        id: buildApk
-        run: ./gradlew :app:assembleRelease
-
       - name: Build app bundle
-        id: buildBundle
+        id: buildRelease
         run: ./gradlew :app:bundleRelease
 
-      - name: Upload app Apk
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-apk
-          path: app/build/outputs/apk/release/
-
-      - name: Upload app Bundle
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-bundle
-          path: app/build/outputs/bundle/release/
-
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        id: create_release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          generate_release_notes: true
-          prerelease: true
-          files: |
-            app/build/outputs/apk/release/app-release.apk
-            app/build/outputs/bundle/release/app-release.aab
-  
+          release_name: ${{ github.ref }}
+          draft: true
+          prerelease: false
 
-  #      - name: Create Release
-  #        id: create_release
-  #        uses: actions/create-release@v1
-  #        env:
-  #          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  #        with:
-  #          tag_name: ${{ github.ref }}
-  #          release_name: ${{ github.ref }}
-  #          draft: true
-  #          prerelease: false
-
+      - name: Upload app
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-bundle
+          path: app/build/outputs/bundle/debug/app-release.aab
+#          path: ${{ steps.sign_app.outputs.signedReleaseFile }}
 
   deploy:
     needs: build
@@ -81,12 +58,11 @@ jobs:
       - uses: actions/checkout@v3
 
       - name: Download app bundle from artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: app-bundle
-#          path: path/to/artifact
 
-      - name: Sign app Bundle
+      - name: Sign app
         uses: r0adkll/sign-android-release@v1
         id: sign_app
         with:
