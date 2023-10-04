@@ -62,6 +62,7 @@ jobs:
           name: app-bundle
           path: ${{ steps.sign_app.outputs.signedReleaseFile }}
 
+  # todo : add it when fixed https://github.com/r0adkll/upload-google-play/issues/197
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -76,7 +77,7 @@ jobs:
       - name: Publish to Play Store
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJsonPlainText: ${{ secrets.SERVICE_ACCOUNT_JSON }}
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_JSON_ACCOUNT }}
           packageName: com.bagnolati.learnoflegends
           releaseFiles: app-release.aab
           track: internal
