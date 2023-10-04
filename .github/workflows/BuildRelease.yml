@@ -32,41 +32,42 @@ jobs:
 #      - name: Build app Apk
 #        run: ./gradlew :app:assembleRelease
 
-      - name: Build app Bundle
-        id: buildRelease
-        run: ./gradlew :app:bundleRelease
-
-      - name: Sign app Bundle
-        uses: r0adkll/sign-android-release@v1
-        id: sign_app
-        with:
-          releaseDirectory: app/build/outputs/bundle/release
-          signingKeyBase64: ${{ secrets.KEY_STORE_BASE64 }}
-          alias: ${{ secrets.ALIAS }}
-          keyStorePassword: ${{ secrets.STORE_PASSWORD }}
-          keyPassword: ${{ secrets.KEY_PASSWORD }}
-        env:
-          BUILD_TOOLS_VERSION: "34.0.0"
+#      - name: Build app Bundle
+#        id: buildRelease
+#        run: ./gradlew :app:bundleRelease
+#
+#      - name: Sign app Bundle
+#        uses: r0adkll/sign-android-release@v1
+#        id: sign_app
+#        with:
+#          releaseDirectory: app/build/outputs/bundle/release
+#          signingKeyBase64: ${{ secrets.KEY_STORE_BASE64 }}
+#          alias: ${{ secrets.ALIAS }}
+#          keyStorePassword: ${{ secrets.STORE_PASSWORD }}
+#          keyPassword: ${{ secrets.KEY_PASSWORD }}
+#        env:
+#          BUILD_TOOLS_VERSION: "34.0.0"
 
       - name: Expose version name
         uses: michpohl/android-expose-version-name-action@v1.0.0
         with:
+          path : 'build.gradle.kts'
           expose-version-name: 'true'
           expose-version-code: 'false'
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ env.ANDROID_VERSION_NAME }}
-          release_name: ${{ env.ANDROID_VERSION_NAME }}
-          draft: true
-          prerelease: false
-          files: |
-            app/build/outputs/apk/**/*.apk
-            app/build/outputs/bundle/**/*.aab
+#      - name: Create Release
+#        id: create_release
+#        uses: actions/create-release@v1
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        with:
+#          tag_name: ${{ env.ANDROID_VERSION_NAME }}
+#          release_name: ${{ env.ANDROID_VERSION_NAME }}
+#          draft: true
+#          prerelease: false
+#          files: |
+#            app/build/outputs/apk/**/*.apk
+#            app/build/outputs/bundle/**/*.aab
 
 #      - name: Upload app
 #        uses: actions/upload-artifact@v2
