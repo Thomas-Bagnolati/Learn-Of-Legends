@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="champions">Champions</string>
+
+    <string name="champion">Champion</string>
+    <string name="select_champ">Click to select a champion</string>
+
+    <!-- Floating Action Buttons -->
+    <string name="order_floating_action_button">Order</string>
+    <string name="order_floating_action_button_close">Close</string>
+    <string name="order_floating_action_button_description">Open Fab Order Menu</string>
+    <string name="close_fab_menu_description">Close Fab Menu</string>
+
+    <!-- Order Champions -->
+    <string name="order_alphabetic_complete">Alphabetic</string>
+    <string name="order_alphabetic_short">A-Z</string>
+
+    <string name="order_hp_complete">Heal Point</string>
+    <string name="order_hp_short">HP</string>
+    <string name="order_hp_lvl_complete">Heal Point(lvl)</string>
+    <string name="order_hp_lvl_short">HP/lvl</string>
+
+    <string name="order_mp_complete">Mana Point</string>
+    <string name="order_mp_short">MP</string>
+    <string name="order_mp_lvl_complete">Mana Point(lvl)</string>
+    <string name="order_mp_lvl_short">MP/lvl</string>
+
+    <string name="order_move_speed_complete">Move Speed</string>
+    <string name="order_move_speed_short">MS</string>
+
+    <string name="order_ar_complete">Armor Resist</string>
+    <string name="order_ar_short">AR</string>
+    <string name="order_ar_lvl_complete">Armor Resist(lvl)</string>
+    <string name="order_ar_lvl_short">AR/lvl</string>
+
+    <string name="order_rm_complete">Magic Resist</string>
+    <string name="order_rm_short">MR</string>
+    <string name="order_rm_lvl_complete">Magic Resist(lvl)</string>
+    <string name="order_rm_lvl_short">MR/lvl</string>
+
+    <string name="order_attack_range_complete">Attack Range</string>
+    <string name="order_attack_range_short">Range</string>
+
+    <string name="order_hp_regen_complete">Heal Point Regen</string>
+    <string name="order_hp_regen_short">HP regen</string>
+    <string name="order_hp_regen_lvl_complete">Heal Point Regen</string>
+    <string name="order_hp_regen_lvl_short">HP regen/lvl</string>
+
+    <string name="order_mp_regen_complete">Mana Point Regen</string>
+    <string name="order_mp_regen_short">MP regen</string>
+    <string name="order_mp_regen_lvl_complete">Mana Point Regen(lvl)</string>
+    <string name="order_mp_regen_lvl_short">MP regen/lvl</string>
+
+    <string name="order_crit_complete">Critical Strike</string>
+    <string name="order_crit_short">Crit</string>
+    <string name="order_crit_lvl_complete">Critical Strike(lvl)</string>
+    <string name="order_crit_lvl_short">Crit/lvl</string>
+
+    <string name="order_ad_complete">Attack Damage</string>
+    <string name="order_ad_short">AD</string>
+    <string name="order_ad_lvl_complete">Attack Damage(lvl)</string>
+    <string name="order_ad_lvl_short">AD/lvl</string>
+
+    <string name="order_as_complete">Attack Speed</string>
+    <string name="order_as_short">AS</string>
+    <string name="order_as_lvl_complete">Attack Speed(lvl)</string>
+    <string name="order_as_lvl_short">AS/lvl</string>
+</resources>

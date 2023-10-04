@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+import "com/bagnolati/learnoflegends/data/dark_theme_config.proto";
+
+option java_package = "com.bagnolati.learnoflegends.core.datastore";
+option java_multiple_files = true;
+
+message UserPreferences {
+  DarkThemeConfigProto dark_theme_config = 1;
+  bool should_hide_onboarding = 2;
+  bool use_dynamic_color = 3;
+}
