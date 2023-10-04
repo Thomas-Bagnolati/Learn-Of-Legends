@@ -18,10 +18,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        tasks.register("appVersionName") {
-            println(versionName)
-        }
     }
 
     buildTypes {
