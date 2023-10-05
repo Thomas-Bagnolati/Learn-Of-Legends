@@ -1,4 +1,4 @@
-Learn Of Legends App ![Learn of legends logo](docs/images/logo.jpeg "Learn of legends logo")
+Learn Of Legends App ![Learn of legends logo](docs/logo.png "Learn of legends logo")
 ====================
 
 In order to share my knowledge and learn about the bests practices I build this application.
@@ -30,8 +30,8 @@ The `feature` module contains:
 
 It use **MVVM** design Pattern on **Multi-Module** project.
 
-# Screen-Shots
-
+# Screenshots
+![Screenshots of LearnOfLegends](docs/screenshots.png "Screenshot showing UI on mobile and tablet")
 
 
 # Tech
