@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - main
+      - github_action_workflow
     tags:
-      - 'v*'
+      - "v*"
 
 jobs:
   build:
@@ -52,19 +53,33 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
-          draft: false
+          draft: true
           prerelease: false
-
+      
+      # TODO: Don't share signed build
       - name: Upload app
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: Signed app bundle
-          path: ${{steps.sign_app.outputs.signedReleaseFile}}
+          name: app-bundle
+          path: ${{ steps.sign_app.outputs.signedReleaseFile }}
 
-#      - name: Deploy to Play Store
-#        uses: r0adkll/upload-google-play@v1
-#        with:
-#          serviceAccountJsonPlainText: ${{secrets.SERVICE_ACCOUNT}}
-#          packageName: com.bagnolati.learnoflegends
-#          releaseFiles: app/build/outputs/bundle/release/app-release.aab
-#          track: production
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download app bundle from artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app-bundle
+
+      - name: Publish to Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_JSON_ACCOUNT }}
+          packageName: com.bagnolati.learnoflegends
+          releaseFiles: app-release.aab
+          track: internal
+          status: draft
