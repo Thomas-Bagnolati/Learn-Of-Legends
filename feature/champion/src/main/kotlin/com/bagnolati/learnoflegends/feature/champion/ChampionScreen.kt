@@ -2,33 +2,34 @@ package com.bagnolati.learnoflegends.feature.champion
 
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
-import androidx.compose.material3.MaterialTheme.colorScheme
-import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bagnolati.learnoflegends.core.model.Champion
+import com.bagnolati.learnoflegends.core.ui.component.DynamicAsyncImage
 import com.bagnolati.learnoflegends.core.ui.component.ErrorAlertDialog
 import com.bagnolati.learnoflegends.core.ui.component.LoadingView
 import com.bagnolati.learnoflegends.core.ui.icon.LolIcons
 import com.bagnolati.learnoflegends.core.ui.preview.ChampionsPreviewParameterProvider
+import com.bagnolati.learnoflegends.core.ui.preview.DevicesPreviews
 import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.core.ui.theme.spacing
-import com.bagnolati.learnoflegends.feature.champion.component.ChampionImage
 import com.bagnolati.learnoflegends.feature.champion.component.PassiveItem
 import com.bagnolati.learnoflegends.feature.champion.component.SpellItem
+import com.bagnolati.learnoflegends.core.ui.R as uiR
 
 @Composable
 internal fun ChampionRoute(
@@ -42,7 +43,7 @@ internal fun ChampionRoute(
         modifier = modifier,
         onBackClick = onBackClick,
         championUiState = championUiState,
-        onClickRetry = viewModel::fetchChampion
+        onClickRetryNetwork = viewModel::fetchChampion
     )
 }
 
@@ -51,34 +52,26 @@ internal fun ChampionScreen(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
     championUiState: ChampionUiState,
-    onClickRetry: () -> Unit
+    onClickRetryNetwork: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val spacing = MaterialTheme.spacing
-    var imageHeight by remember { mutableFloatStateOf(1f) }
-    var championImageIsShow by remember { mutableStateOf(true) }
-
-    // Compare scrollState to champion imageSize to know if is show on the screen
-    if (!isSystemInDarkTheme()) {
-        LaunchedEffect(key1 = scrollState.value) {
-            championImageIsShow = scrollState.value < imageHeight
-        }
-    }
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = colorScheme.surface
+        color = MaterialTheme.colorScheme.surface
     ) {
         when (championUiState) {
             is ChampionUiState.Success -> {
                 Column(
                     Modifier.verticalScroll(scrollState)
                 ) {
-                    ChampionImage(
-                        championUiState = championUiState,
-                        modifier = Modifier.onGloballyPositioned { layoutCoordinates ->
-                            imageHeight = layoutCoordinates.size.height.toFloat()
-                        },
+                    DynamicAsyncImage(
+                        modifier = Modifier.fillMaxWidth(),
+                        imageUrl = championUiState.champion.imageUrl.splash,
+                        contentScale = ContentScale.FillWidth,
+                        placeholder = painterResource(id = uiR.drawable.ic_champion_placeholder_splash),
+                        contentDescription = null
                     )
                     Presentation(
                         champion = championUiState.champion,
@@ -88,21 +81,22 @@ internal fun ChampionScreen(
                         ),
                     )
                     Text(
-                        text = "Passive",
-                        color = colorScheme.onSurface,
-                        style = typography.headlineSmall, modifier = Modifier
-                            .padding(horizontal = spacing.horizontalContent)
+                        text = stringResource(id = R.string.champion_passive),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.padding(horizontal = spacing.horizontalContent)
                     )
-                    PassiveItem(
-                        // We know passive champion will never be nullable on this screen.
-                        passive = championUiState.champion.passive!!,
-                        modifier = Modifier.padding(vertical = spacing.verticalContent, horizontal = spacing.horizontalContent),
-                    )
+                    championUiState.champion.passive?.let {
+                        PassiveItem(
+                            passive = it,
+                            modifier = Modifier.padding(vertical = spacing.verticalContent, horizontal = spacing.horizontalContent),
+                        )
+                    }
                     Text(
-                        text = "Spells",
-                        color = colorScheme.onSurface,
-                        style = typography.headlineSmall, modifier = Modifier
-                            .padding(horizontal = spacing.horizontalContent)
+                        text = stringResource(id = R.string.champion_spells),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.padding(horizontal = spacing.horizontalContent)
                     )
                     championUiState.champion.spells.forEach {
                         SpellItem(
@@ -121,15 +115,14 @@ internal fun ChampionScreen(
             is ChampionUiState.Error -> {
                 ErrorAlertDialog(
                     message = championUiState.error?.message,
-                    onClickRetry = onClickRetry
+                    onClickRetry = onClickRetryNetwork
                 )
             }
         }
     }
 
     ChampionTopAppBar(
-        onBackClick = onBackClick,
-        isDarkBackground = championImageIsShow
+        onClickNavigation = onBackClick,
     )
 
 }
@@ -141,17 +134,19 @@ private fun Presentation(
 ) {
     val spacing = MaterialTheme.spacing
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = MaterialTheme.spacing.medium),
     ) {
         Text(
             text = champion.name,
-            style = typography.headlineLarge,
+            style = MaterialTheme.typography.headlineLarge,
             modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center
         )
         Text(
             text = champion.title,
-            style = typography.labelLarge,
-            color = colorScheme.secondary,
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.secondary,
             modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.height(spacing.large))
@@ -176,7 +171,7 @@ private fun ExpendableDescription(
         if (!shouldExpand)
             Text(
                 text = textTrunked,
-                style = typography.bodyMedium,
+                style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -185,7 +180,7 @@ private fun ExpendableDescription(
         else
             Text(
                 text = textComplete,
-                style = typography.bodyMedium,
+                style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -208,16 +203,20 @@ private fun ExpendableDescription(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun ChampionTopAppBar(
-    isDarkBackground: Boolean,
-    onBackClick: () -> Unit
+    onClickNavigation: () -> Unit
 ) {
     CenterAlignedTopAppBar(
         title = {},
         navigationIcon = {
-            IconButton(onClick = { onBackClick() }) {
+            IconButton(
+                onClick = onClickNavigation,
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = MaterialTheme.colorScheme.surface.copy(0.4f),
+                    contentColor = MaterialTheme.colorScheme.onSurface
+                )
+            ) {
                 Icon(
                     imageVector = LolIcons.ArrowBack,
-                    tint = if (isDarkBackground) Color.White else colorScheme.onSurface,
                     contentDescription = null
                 )
             }
@@ -229,6 +228,7 @@ private fun ChampionTopAppBar(
 }
 
 @ThemePreviews
+@DevicesPreviews
 @Composable
 private fun ChampionScreenPreview(
     @PreviewParameter(ChampionsPreviewParameterProvider::class)
@@ -241,7 +241,7 @@ private fun ChampionScreenPreview(
                 championUiState = ChampionUiState.Success(
                     champion = champions.first()
                 ),
-                onClickRetry = {}
+                onClickRetryNetwork = {}
             )
         }
     }
