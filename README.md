@@ -1,4 +1,6 @@
-Learn Of Legends App ![Learn of legends logo](docs/logo.png "Learn of legends logo")
+<img src="docs/logo.png" alt="drawing" width="100"/>
+
+Learn Of Legends App 
 ====================
 
 In order to share my knowledge and learn about the bests practices I build this application.
@@ -72,3 +74,7 @@ It use **MVVM** design Pattern on **Multi-Module** project.
 
 ### CI/CD
 - GitHub Action workflow (build, push on repo, deploy on GooglePlayStore)
+
+# License
+
+**Learn of Legends** is distributed under the terms of the Apache License (Version 2.0).
