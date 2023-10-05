@@ -11,10 +11,8 @@ plugins {
 android {
     defaultConfig {
         applicationId = "com.bagnolati.learnoflegends"
-        versionCode = 2
-        versionName = "0.0.1" // X.Y.Z; X = Major, Y = minor, Z = Patch level
-
-        tasks.register("appVersionName") { println(versionName.toString()) }
+        versionCode = 3
+        versionName = "1.0.0" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
