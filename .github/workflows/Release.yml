@@ -28,6 +28,12 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
+      - name: Bump version code
+        uses: chkfung/android-version-actions@v1.2.1
+        with:
+          gradlePath: app/build.gradle.kts
+          versionCode: ${{github.run_number}}
+
       - name: Build app bundle
         id: buildReleaseBundle
         run: ./gradlew :app:bundleRelease
@@ -43,11 +49,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: true
+          release_name: Release ${{ github.ref }}
+          draft: false
           prerelease: false
 
-      - name: Upload app
+      - name: Upload app on Release
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -94,4 +100,4 @@ jobs:
           packageName: com.bagnolati.learnoflegends
           releaseFiles: app-release.aab
           track: internal
-          status: draft
+#          status: draft
