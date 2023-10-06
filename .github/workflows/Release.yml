@@ -1,10 +1,9 @@
 name: GitHub Release
 
 on:
-  push:
+  pull_request:
     branches:
       - main
-      - github_action_workflow # TODO : remove when end to try (pull_request:)
     tags:
       - "v*"
 
@@ -29,9 +28,9 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-#      - name: Build app bundle
-#        id: buildReleaseBundle
-#        run: ./gradlew :app:bundleRelease
+      - name: Build app bundle
+        id: buildReleaseBundle
+        run: ./gradlew :app:bundleRelease
 
       - name: Build app apk
         id: buildReleaseApk
@@ -58,42 +57,41 @@ jobs:
           asset_name: app-release.apk
           asset_content_type: application/vnd.android.package-archive
 
+      - name: Sign app
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.KEY_STORE_BASE64 }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"
 
-#      - name: Sign app
-#        uses: r0adkll/sign-android-release@v1
-#        id: sign_app
-#        with:
-#          releaseDirectory: app/build/outputs/bundle/release
-#          signingKeyBase64: ${{ secrets.KEY_STORE_BASE64 }}
-#          alias: ${{ secrets.ALIAS }}
-#          keyStorePassword: ${{ secrets.STORE_PASSWORD }}
-#          keyPassword: ${{ secrets.KEY_PASSWORD }}
-#        env:
-#          BUILD_TOOLS_VERSION: "34.0.0"
-#
-#      - name: Upload app
-#        uses: actions/upload-artifact@v3
-#        with:
-#          name: sign-app
-#          path: ${{ steps.sign_app.outputs.signedReleaseFile }}
-#
-#
-#  deploy:
-#    needs: build
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v3
-#
-#      - name: Download app bundle from artifact
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: sign-app
-#
-#      - name: Publish to Play Store
-#        uses: r0adkll/upload-google-play@v1
-#        with:
-#          serviceAccountJsonPlainText: ${{ secrets.SERVICE_JSON_ACCOUNT }}
-#          packageName: com.bagnolati.learnoflegends
-#          releaseFiles: app-release.aab
-#          track: internal
-#          status: draft
+      - name: Upload sign app
+        uses: actions/upload-artifact@v3
+        with:
+          name: sign-app
+          path: ${{ steps.sign_app.outputs.signedReleaseFile }}
+
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download sign app
+        uses: actions/download-artifact@v3
+        with:
+          name: sign-app
+
+      - name: Publish to Play Store
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.SERVICE_JSON_ACCOUNT }}
+          packageName: com.bagnolati.learnoflegends
+          releaseFiles: app-release.aab
+          track: internal
+          status: draft
