@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - github_action_workflow # TODO : remove this after try
+      - github_action_workflow # TODO : remove when end to try (pull_request:)
     tags:
       - "v*"
 
@@ -29,42 +29,39 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-#      - name: Build app apk
-#        id: buildApk
-#        run: ./gradlew :app:assembleRelease
-
       - name: Build app bundle
-        id: buildBundle
+        id: buildReleaseBundle
         run: ./gradlew :app:bundleRelease
 
-#      - name: Upload app apk
-#        uses: actions/upload-artifact@v3
-#        id: app-apk
-#        with:
-#          name: app-release.apk
-#          path: ${{ steps.buildApk.outputs }}
-
-      - name: Upload app bundle
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-release.aab
-          path: app/build/outputs/bundle/release/app-release.aab
+      - name: Build app apk
+        id: buildReleaseApk
+        run: ./gradlew :app:assembleRelease
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          generate_release_notes: true
-          prerelease: false
-          draft: false
-          name: Release ${{ github.ref }}
           tag_name: ${{ github.ref }}
-          files: |
-            app/build/outputs/bundle/release/app-release.aab
+          release_name: ${{ github.ref }}
+          draft: true
+          prerelease: false
 
-      # TODO: See later
-#      - name: Sign app bundle
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          asset_path: app/build/outputs/apk/release/app-release.apk
+          asset_name: app-release.apk
+          asset_content_type: application/zip
+
+#      - name: Sign app
 #        uses: r0adkll/sign-android-release@v1
-#        id: sign_app_bundle
+#        id: sign_app
 #        with:
 #          releaseDirectory: app/build/outputs/bundle/release
 #          signingKeyBase64: ${{ secrets.KEY_STORE_BASE64 }}
@@ -73,24 +70,14 @@ jobs:
 #          keyPassword: ${{ secrets.KEY_PASSWORD }}
 #        env:
 #          BUILD_TOOLS_VERSION: "34.0.0"
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #
-#      - name: Upload app bundle
+#      - name: Upload app
 #        uses: actions/upload-artifact@v3
 #        with:
-#          name: uploaded_app_sign_bundle
-#          path: ${{ steps.sign_app_bundle.outputs.signedReleaseFile }}
+#          name: sign-app
+#          path: ${{ steps.sign_app.outputs.signedReleaseFile }}
 #
-#      - name: Publish to Play Store
-#        uses: r0adkll/upload-google-play@v1
-#        with:
-#          serviceAccountJsonPlainText: ${{ secrets.SERVICE_JSON_ACCOUNT }}
-#          packageName: com.bagnolati.learnoflegends
-#          releaseFiles: app-release.aab
-#          track: internal
-#          status: draft
-
-
+#
 #  deploy:
 #    needs: build
 #    runs-on: ubuntu-latest
@@ -100,7 +87,7 @@ jobs:
 #      - name: Download app bundle from artifact
 #        uses: actions/download-artifact@v3
 #        with:
-#          name: uploaded_app_sign_bundle
+#          name: sign-app
 #
 #      - name: Publish to Play Store
 #        uses: r0adkll/upload-google-play@v1
