@@ -29,13 +29,20 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
-      - name: Build app bundle
-        id: buildReleaseBundle
-        run: ./gradlew :app:bundleRelease
+#      - name: Build app bundle
+#        id: buildReleaseBundle
+#        run: ./gradlew :app:bundleRelease
 
       - name: Build app apk
         id: buildReleaseApk
         run: ./gradlew :app:assembleRelease
+
+      - name: Upload app
+        uses: actions/upload-artifact@v3
+        with:
+          name: buildReleaseApk
+          path: app/build/outputs/apk/release/app-release.apk
+
 
       - name: Create Release
         id: create_release
