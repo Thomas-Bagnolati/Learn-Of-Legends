@@ -6,7 +6,7 @@ Learn Of Legends App
 In order to share my knowledge and learn about the bests practices I build this application.
 It's based on [nowinandroid](https://github.com/android/nowinandroid) app.
 
-This is the repository steel in a work in progress 🚧.
+This repository is still a work in progress 🚧.
 
 # Architecture
 
