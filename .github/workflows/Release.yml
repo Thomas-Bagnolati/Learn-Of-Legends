@@ -1,10 +1,9 @@
 name: GitHub Release
 
 on:
-  push:
+  pull_request:
     branches:
       - main
-      - github_action_workflow
     tags:
       - "v*"
 
@@ -30,8 +29,33 @@ jobs:
           java-version: 17
 
       - name: Build app bundle
-        id: buildRelease
+        id: buildReleaseBundle
         run: ./gradlew :app:bundleRelease
+
+      - name: Build app apk
+        id: buildReleaseApk
+        run: ./gradlew :app:assembleRelease
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: true
+          prerelease: false
+
+      - name: Upload app
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: app/build/outputs/apk/release/app-release-unsigned.apk
+          asset_name: app-release.apk
+          asset_content_type: application/vnd.android.package-archive
 
       - name: Sign app
         uses: r0adkll/sign-android-release@v1
@@ -45,22 +69,10 @@ jobs:
         env:
           BUILD_TOOLS_VERSION: "34.0.0"
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
-          draft: true
-          prerelease: false
-      
-      # TODO: Don't share signed build
-      - name: Upload app
+      - name: Upload sign app
         uses: actions/upload-artifact@v3
         with:
-          name: app-bundle
+          name: sign-app
           path: ${{ steps.sign_app.outputs.signedReleaseFile }}
 
 
@@ -70,10 +82,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Download app bundle from artifact
+      - name: Download sign app
         uses: actions/download-artifact@v3
         with:
-          name: app-bundle
+          name: sign-app
 
       - name: Publish to Play Store
         uses: r0adkll/upload-google-play@v1

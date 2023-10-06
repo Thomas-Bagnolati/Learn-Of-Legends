@@ -16,7 +16,7 @@ internal object DdragonUrl {
 
     const val PASSIVE_IMAGE_URL = "${BASE_URL_WITH_VERSION}img/passive/"
     const val MINI_IMAGE_URL = "${BASE_URL_WITH_VERSION}img/champion/"
-    const val SPLASH_IMAGE_URL = "${BASE_URL}img/champion/splash/"
+    const val SPLASH_IMAGE_URL = "${BASE_URL}cdn/img/champion/splash/"
     const val LOADING_IMAGE_URL = "${BASE_URL}img/champion/loading/"
     const val SPELL_IMAGE_URL = "${BASE_URL_WITH_VERSION}img/spell/"
 }
