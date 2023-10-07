@@ -56,9 +56,9 @@ internal fun SearchRowSection(
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Search
+                    imeAction = ImeAction.Send
                 ),
-                keyboardActions = KeyboardActions(onSearch = { onSubmitKeyboard() })
+                keyboardActions = KeyboardActions(onSend = { onSubmitKeyboard() })
             )
         }
         FloatingActionButton(
