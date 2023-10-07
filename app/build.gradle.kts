@@ -13,7 +13,7 @@ android {
         applicationId = "com.bagnolati.learnoflegends"
 
         versionCode = 5
-        versionName = "0.1.0" // X.Y.Z; X = Major, Y = minor, Z = Patch level
+        versionName = "1.0.0" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

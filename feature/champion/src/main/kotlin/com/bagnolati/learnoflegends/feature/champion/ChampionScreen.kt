@@ -80,24 +80,31 @@ internal fun ChampionScreen(
                             vertical = spacing.verticalContent
                         ),
                     )
+
                     Text(
                         text = stringResource(id = R.string.champion_passive),
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.headlineSmall,
                         modifier = Modifier.padding(horizontal = spacing.horizontalContent)
                     )
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+
                     championUiState.champion.passive?.let {
                         PassiveItem(
                             passive = it,
                             modifier = Modifier.padding(vertical = spacing.verticalContent, horizontal = spacing.horizontalContent),
                         )
                     }
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+
                     Text(
                         text = stringResource(id = R.string.champion_spells),
                         color = MaterialTheme.colorScheme.onSurface,
                         style = MaterialTheme.typography.headlineSmall,
                         modifier = Modifier.padding(horizontal = spacing.horizontalContent)
                     )
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+
                     championUiState.champion.spells.forEach {
                         SpellItem(
                             spell = it,
