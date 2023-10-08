@@ -68,7 +68,7 @@ internal fun ChampionScreen(
                 ) {
                     DynamicAsyncImage(
                         modifier = Modifier.fillMaxWidth(),
-                        imageUrl = championUiState.champion.imageUrl.splash,
+                        imageUrl = championUiState.champion.skins[0].splashUrl,
                         contentScale = ContentScale.FillWidth,
                         placeholder = painterResource(id = uiR.drawable.ic_champion_placeholder_splash),
                         contentDescription = null

@@ -16,7 +16,8 @@ data class Champion(
     val allyTips: List<String> = emptyList(),
     val enemyTips: List<String> = emptyList(),
     val passive: Passive? = null,
-    val spells: List<Spell> = emptyList()
+    val spells: List<Spell> = emptyList(),
+    val skins: List<Skin> = emptyList()
 ) {
     data class Stats(
         val hp: Int,
@@ -51,7 +52,7 @@ data class Champion(
         val square: String,
         val splash: String,
         val loading: String,
-        val spell: String
+        val spell: String,
     )
 
     data class Passive(
@@ -85,6 +86,14 @@ data class Champion(
             val effect: List<String>?
         )
     }
+
+    data class Skin(
+        val id: String,
+        val num: Int,
+        val name: String,
+        val chromas: Boolean,
+        val splashUrl : String
+    )
 }
 
 

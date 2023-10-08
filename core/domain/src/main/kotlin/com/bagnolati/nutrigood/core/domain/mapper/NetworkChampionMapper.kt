@@ -1,9 +1,10 @@
-package com.bagnolati.learnoflegends.core.network.model
+package com.bagnolati.nutrigood.core.domain.mapper
 
 import android.text.Html
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.core.network.DdragonUrl
 import com.bagnolati.learnoflegends.core.network.LeagueOfLegendsUrl
+import com.bagnolati.learnoflegends.core.network.model.NetworkChampion
 import java.util.Locale
 
 
@@ -23,12 +24,13 @@ fun NetworkChampion.asChampion(): Champion {
         imageUrl = image.asImage(),
         stats = stats.asStats(),
         passive = passive?.asPassive(),
-        spells = spells.map { it.asSpell() }
+        spells = spells.map { it.asSpell() },
+        skins = skins.map { it.asSkin(full = image.full) }
     )
 }
 
 /**
- * Map tag network to [Champion.Tag]
+ * Map String tags network to [Champion.Tag]
  */
 fun String.asTag(): Champion.Tag {
     val tagImageUrl = LeagueOfLegendsUrl.ROLE_IMG + "role_icon_${this.lowercase()}.png"
@@ -118,6 +120,23 @@ fun NetworkChampion.NetworkImage.asImage(): Champion.ImageUrl {
         splash = DdragonUrl.SPLASH_IMAGE_URL + champUrl,
         loading = DdragonUrl.LOADING_IMAGE_URL + champUrl,
         spell = DdragonUrl.SPELL_IMAGE_URL + full
+    )
+}
+
+/**
+ * Map [NetworkChampion.NetworkSkin] network to [Champion.Skin]
+ */
+fun NetworkChampion.NetworkSkin.asSkin(full: String): Champion.Skin {
+    val champWithoutExt = full.removeSuffix(".png")
+    val ext = ".jpg"
+    val champUrl = champWithoutExt + "_" + num + ext
+
+    return Champion.Skin(
+        id = id,
+        num = num,
+        name = name,
+        chromas = chromas,
+        splashUrl = DdragonUrl.SPLASH_IMAGE_URL + champUrl
     )
 }
 
