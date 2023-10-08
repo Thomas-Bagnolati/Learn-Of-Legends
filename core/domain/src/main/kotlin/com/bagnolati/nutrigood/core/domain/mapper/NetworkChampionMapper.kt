@@ -1,9 +1,10 @@
-package com.bagnolati.learnoflegends.core.network.model
+package com.bagnolati.nutrigood.core.domain.mapper
 
 import android.text.Html
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.core.network.DdragonUrl
 import com.bagnolati.learnoflegends.core.network.LeagueOfLegendsUrl
+import com.bagnolati.learnoflegends.core.network.model.NetworkChampion
 import java.util.Locale
 
 

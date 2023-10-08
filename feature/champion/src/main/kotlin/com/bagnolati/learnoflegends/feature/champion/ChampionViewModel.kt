@@ -7,9 +7,9 @@ import com.bagnolati.learnoflegends.core.common.result.Result
 import com.bagnolati.learnoflegends.core.common.result.Result.Error
 import com.bagnolati.learnoflegends.core.common.result.Result.Loading
 import com.bagnolati.learnoflegends.core.common.result.Result.Success
-import com.bagnolati.learnoflegends.core.data.repository.ChampionRepository
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.feature.champion.navigation.ChampionArgs
+import com.bagnolati.nutrigood.core.domain.GetChampionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ChampionViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val championRepository: ChampionRepository,
+    private val getChampionUseCase: GetChampionUseCase
 ) : ViewModel() {
 
     private val championIdArgs: ChampionArgs = ChampionArgs(savedStateHandle)
@@ -51,7 +51,7 @@ class ChampionViewModel @Inject constructor(
     fun fetchChampion() {
         viewModelScope.launch {
             championResult.update {
-                championRepository.getChampion(championIdArgs.championId)
+                getChampionUseCase(championIdArgs.championId)
             }
         }
     }

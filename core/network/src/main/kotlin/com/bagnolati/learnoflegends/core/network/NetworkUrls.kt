@@ -6,7 +6,7 @@ package com.bagnolati.learnoflegends.core.network
  *
  * See [documentation](https://developer.riotgames.com/docs/lol)
  */
-internal object DdragonUrl {
+object DdragonUrl {
     private const val VERSION = "13.18.1"
 //    private const val BASE_URL = BuildConfig.DDRAGON_BASE_URL
     private const val BASE_URL = "https://ddragon.leagueoflegends.com/"
@@ -21,7 +21,7 @@ internal object DdragonUrl {
     const val SPELL_IMAGE_URL = "${BASE_URL_WITH_VERSION}img/spell/"
 }
 
-internal object LeagueOfLegendsUrl {
+object LeagueOfLegendsUrl {
     private const val BASE_URL = "https://universe.leagueoflegends.com/"
 //    private const val BASE_URL = BuildConfig.LOL_BASE_URL
     const val ROLE_IMG = "${BASE_URL}images/"
