@@ -3,10 +3,10 @@ package com.bagnolati.learnoflegends.feature.champions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bagnolati.learnoflegends.core.common.result.Result
-import com.bagnolati.learnoflegends.core.data.repository.ChampionRepository
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.feature.champions.component.ChampionOrder
 import com.bagnolati.learnoflegends.feature.champions.component.getStatByOrderAsDouble
+import com.bagnolati.nutrigood.core.domain.GetChampionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChampionsViewModel @Inject constructor(
-    private val championRepository: ChampionRepository,
+    private val getChampionsUseCase: GetChampionsUseCase
 ) : ViewModel() {
 
     private val championsResponse = MutableStateFlow<Result<List<Champion>>>(Result.Loading)
@@ -68,7 +68,7 @@ class ChampionsViewModel @Inject constructor(
     fun fetchChampions() {
         viewModelScope.launch {
             championsResponse.update { Result.Loading }
-            championsResponse.update { championRepository.getChampions() }
+            championsResponse.update { getChampionsUseCase() }
         }
     }
 

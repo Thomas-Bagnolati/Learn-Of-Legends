@@ -41,3 +41,14 @@ fun <T> Flow<T>.asResult(
             true
         }
 }
+
+/**
+ * Transform the result on success, else return current value.
+ */
+inline fun <T, R> Result<T>.mapOnSuccess(transform: (T) -> R): Result<R> {
+    return when (this) {
+        is Result.Success -> Result.Success(transform(data))
+        is Result.Error -> this
+        is Result.Loading -> this
+    }
+}
