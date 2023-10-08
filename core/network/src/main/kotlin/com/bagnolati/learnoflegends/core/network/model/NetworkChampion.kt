@@ -25,7 +25,8 @@ data class NetworkChampion(
     val allytips: List<String> = emptyList(),
     val enemytips: List<String> = emptyList(),
     val passive: NetworkPassive? = null,
-    val spells: List<NetworkSpell> = emptyList()
+    val spells: List<NetworkSpell> = emptyList(),
+    val skins : List<NetworkSkin> = emptyList()
 ) {
 
     @Serializable
@@ -105,5 +106,13 @@ data class NetworkChampion(
             val effect: List<String>
         )
     }
+
+    @Serializable
+    data class NetworkSkin(
+        val id: String,
+        val num: Int,
+        val name: String,
+        val chromas: Boolean
+    )
 
 }
