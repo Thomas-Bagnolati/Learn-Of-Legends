@@ -4,7 +4,6 @@ Learn Of Legends App
 ====================
 
 In order to share my knowledge and learn about the bests practices I build this application.
-It's based on [nowinandroid](https://github.com/android/nowinandroid) app.
 
 This repository is still a work in progress 🚧.
 
