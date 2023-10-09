@@ -4,9 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bagnolati.learnoflegends.core.common.result.Result
-import com.bagnolati.learnoflegends.core.common.result.Result.Error
-import com.bagnolati.learnoflegends.core.common.result.Result.Loading
-import com.bagnolati.learnoflegends.core.common.result.Result.Success
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.feature.champion.navigation.ChampionArgs
 import com.bagnolati.nutrigood.core.domain.GetChampionUseCase
@@ -34,9 +31,9 @@ class ChampionViewModel @Inject constructor(
         championResult
             .map { result ->
                 when (result) {
-                    is Success -> ChampionUiState.Success(result.data)
-                    is Error -> ChampionUiState.Error(result.exception)
-                    Loading -> ChampionUiState.Loading
+                    is Result.Success -> ChampionUiState.Success(result.data)
+                    is Result.Error -> ChampionUiState.Error(result.exception)
+                    Result.Loading -> ChampionUiState.Loading
                 }
             }.stateIn(
                 scope = viewModelScope,
@@ -50,6 +47,7 @@ class ChampionViewModel @Inject constructor(
 
     fun fetchChampion() {
         viewModelScope.launch {
+            championResult.update { Result.Loading }
             championResult.update {
                 getChampionUseCase(championIdArgs.championId)
             }
