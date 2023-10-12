@@ -84,7 +84,7 @@ internal fun ChampionOrderColumn(
                 onClick = onClickChampionOrder,
                 state = lazyListState
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(18.dp))
         }
         ExtendedFloatingActionButton(
             modifier = Modifier.padding(
