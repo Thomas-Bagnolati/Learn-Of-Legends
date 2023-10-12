@@ -20,23 +20,24 @@ data class Champion(
     val skins: List<Skin> = emptyList()
 ) {
     data class Stats(
-        val hp: Int,
-        val hpPerLevel: Int,
+        val alphabetic: Double,
+        val hp: Double,
+        val hpPerLevel: Double,
         val mp: Double,
         val mpPerLevel: Double,
-        val moveSpeed: Int,
-        val armor: Int,
+        val moveSpeed: Double,
+        val armor: Double,
         val armorPerLevel: Double,
-        val spellBlock: Int,
+        val spellBlock: Double,
         val spellBlockPerLevel: Double,
-        val attackRange: Int,
+        val attackRange: Double,
         val hpRegen: Double,
         val hpRegenPerLevel: Double,
         val mpRegen: Double,
         val mpRegenPerLevel: Double,
-        val crit: Int,
-        val critPerLevel: Int,
-        val attackDamage: Int,
+        val crit: Double,
+        val critPerLevel: Double,
+        val attackDamage: Double,
         val attackDamagePerLevel: Double,
         val attackSpeedPerLevel: Double,
         val attackSpeed: Double
@@ -92,8 +93,6 @@ data class Champion(
         val num: Int,
         val name: String,
         val chromas: Boolean,
-        val splashUrl : String
+        val splashUrl: String
     )
 }
-
-

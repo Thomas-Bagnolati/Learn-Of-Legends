@@ -1,6 +1,5 @@
 package com.bagnolati.learnoflegends.feature.champions.component
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
@@ -124,40 +123,36 @@ internal fun ChampionHeader(
                             style = MaterialTheme.typography.titleMedium,
                         )
                         Text(
-                            text = selectedChampion.getStatByOrderAsString(order),
+                            text = selectedChampion.getStatByOrder(order).asTextNumber(),
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    AnimatedVisibility(order != ChampionOrder.ALPHABETIC) {
-                        StatProgressBar(
-                            progress = calculateProgressValue(
-                                selectedChampion.getStatByOrderAsDouble(order),
-                                minStatValue,
-                                maxStatValue
-                            ) ?: 0f
-                        )
-                    }
+                    StatProgressBar(
+                        progress = calculateProgressValue(
+                            selectedChampion.getStatByOrder(order),
+                            minStatValue,
+                            maxStatValue
+                        ) ?: 0f
+                    )
                     Spacer(modifier = Modifier.height(2.dp))
 
-                    AnimatedVisibility(order != ChampionOrder.ALPHABETIC) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 6.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = minStatValue.numberToString(),
-                                style = MaterialTheme.typography.labelMedium.copy(fontStyle = FontStyle.Italic),
-                            )
-                            Text(
-                                text = maxStatValue.numberToString(),
-                                style = MaterialTheme.typography.labelMedium.copy(fontStyle = FontStyle.Italic),
-                            )
-                        }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = minStatValue.asTextNumber(),
+                            style = MaterialTheme.typography.labelMedium.copy(fontStyle = FontStyle.Italic),
+                        )
+                        Text(
+                            text = maxStatValue.asTextNumber(),
+                            style = MaterialTheme.typography.labelMedium.copy(fontStyle = FontStyle.Italic),
+                        )
 
                     }
                 }
