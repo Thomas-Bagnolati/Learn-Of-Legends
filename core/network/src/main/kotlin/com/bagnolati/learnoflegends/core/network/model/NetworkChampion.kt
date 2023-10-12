@@ -85,7 +85,7 @@ data class NetworkChampion(
         val name: String,
         val description: String,
         val tooltip: String,
-        val leveltip: Leveltip? = null,
+        val leveltip: NetworkLeveltip? = null,
         val maxrank: Int,
         val cooldown: List<Float>,
         val cooldownBurn: String,
@@ -101,7 +101,7 @@ data class NetworkChampion(
         val resource: String
     ) {
         @Serializable
-        data class Leveltip(
+        data class NetworkLeveltip(
             val label: List<String>,
             val effect: List<String>
         )

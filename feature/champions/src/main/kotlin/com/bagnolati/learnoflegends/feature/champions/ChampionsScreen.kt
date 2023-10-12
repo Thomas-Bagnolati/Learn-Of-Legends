@@ -16,6 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.core.ui.component.ErrorAlertDialog
 import com.bagnolati.learnoflegends.core.ui.component.LoadingView
+import com.bagnolati.learnoflegends.core.ui.component.SearchRowSection
 import com.bagnolati.learnoflegends.core.ui.preview.ChampionsPreviewParameterProvider
 import com.bagnolati.learnoflegends.core.ui.preview.DevicesPreviews
 import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
@@ -25,7 +26,6 @@ import com.bagnolati.learnoflegends.feature.champions.component.ChampionHeader
 import com.bagnolati.learnoflegends.feature.champions.component.ChampionOrder
 import com.bagnolati.learnoflegends.feature.champions.component.ChampionOrderColumn
 import com.bagnolati.learnoflegends.feature.champions.component.ChampionRowItem
-import com.bagnolati.learnoflegends.feature.champions.component.SearchRowSection
 import com.bagnolati.learnoflegends.feature.champions.component.getStatByOrderAsString
 import kotlinx.coroutines.delay
 import java.util.*

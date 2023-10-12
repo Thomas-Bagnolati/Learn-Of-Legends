@@ -1,4 +1,4 @@
-package com.bagnolati.learnoflegends.feature.champions.component
+package com.bagnolati.learnoflegends.core.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -25,13 +25,13 @@ import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.core.ui.theme.spacing
 
 @Composable
-internal fun SearchRowSection(
+fun SearchRowSection(
     modifier: Modifier = Modifier,
     opened: Boolean,
+    searchQuery: String,
+    onSearchQueryChange: (String) -> Unit,
     onClickSearchFab: () -> Unit,
     onSubmitKeyboard: () -> Unit,
-    searchQuery: String,
-    onSearchQueryChange: (String) -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -85,7 +85,7 @@ private fun SearchRowPreview() {
     LolTheme {
         SearchRowSection(
             opened = true,
-            searchQuery = "champion query",
+            searchQuery = "Search query",
             onClickSearchFab = {},
             onSearchQueryChange = {},
             onSubmitKeyboard = {}

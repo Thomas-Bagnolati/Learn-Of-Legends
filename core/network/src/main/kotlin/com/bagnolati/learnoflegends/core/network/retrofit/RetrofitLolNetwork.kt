@@ -3,6 +3,7 @@ package com.bagnolati.learnoflegends.core.network.retrofit
 import com.bagnolati.learnoflegends.core.network.DdragonUrl
 import com.bagnolati.learnoflegends.core.network.LolNetworkDataSource
 import com.bagnolati.learnoflegends.core.network.model.NetworkChampion
+import com.bagnolati.learnoflegends.core.network.model.NetworkItem
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.Call
@@ -36,5 +37,8 @@ class RetrofitLolNetwork @Inject constructor(
 
     override suspend fun getChampion(championId: String): NetworkChampion =
         networkApi.getChampion(championId).data.first()
-}
 
+    override suspend fun getItems(): List<NetworkItem> =
+        networkApi.getItems().data
+
+}

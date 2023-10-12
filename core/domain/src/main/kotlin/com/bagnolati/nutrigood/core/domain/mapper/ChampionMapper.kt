@@ -150,4 +150,4 @@ fun String.htmlToString(): String =
 /**
  * Safely capitalize String.
  */
-fun String.capitalize() = this.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+fun String.capitalize() = this.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
