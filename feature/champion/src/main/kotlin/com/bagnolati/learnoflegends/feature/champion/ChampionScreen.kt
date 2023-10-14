@@ -122,7 +122,7 @@ internal fun ChampionScreen(
             is ChampionUiState.Error -> {
                 ErrorAlertDialog(
                     message = championUiState.error?.message,
-                    onClickRetry = onClickRetryNetwork
+                    onConfirmDialogError = onClickRetryNetwork
                 )
             }
         }

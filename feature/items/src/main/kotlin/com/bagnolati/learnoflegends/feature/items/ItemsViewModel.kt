@@ -23,6 +23,7 @@ class ItemsViewModel @Inject constructor(
 
     private val itemsResponse = MutableStateFlow<Result<List<Item>>>(Result.Loading)
     private val searchQuery: MutableStateFlow<String> = MutableStateFlow("")
+    private val sort: MutableStateFlow<ItemsSort> = MutableStateFlow(ItemsSort.DEFAULT)
 
     val itemsUiState: StateFlow<ItemsUiState> =
         itemsUiState()
@@ -47,24 +48,32 @@ class ItemsViewModel @Inject constructor(
         }
     }
 
+    fun selectSort(itemsSort: ItemsSort) {
+        sort.update { itemsSort }
+    }
+
     private fun itemsUiState(): Flow<ItemsUiState> {
         return combine(
             itemsResponse,
-            searchQuery
-        ) { result: Result<List<Item>>, query: String ->
+            searchQuery,
+            sort
+        ) { result: Result<List<Item>>, query: String, sort: ItemsSort ->
             when (result) {
                 is Result.Success -> {
                     val filteredItems = result.data
                         .filter { it.maps.summonersRift }
-                        .sortedBy { it.id }
+                        .filter { it.getStatBySortItem(sort) > 0 }
+                        .sortedBy { it.getStatBySortItem(sort) }
                         .filter {
                             it.name.lowercase()
                                 .contains(query.lowercase())
                         }
 
+
                     ItemsUiState.Success(
                         items = filteredItems,
-                        searchQuery = query
+                        searchQuery = query,
+                        sort = sort
                     )
                 }
 
@@ -73,13 +82,17 @@ class ItemsViewModel @Inject constructor(
             }
         }
     }
+
+
 }
+
 
 interface ItemsUiState {
     object Loading : ItemsUiState
     data class Success(
         val items: List<Item>,
-        val searchQuery: String
+        val searchQuery: String,
+        val sort: ItemsSort
     ) : ItemsUiState
 
     data class Error(val exception: Throwable?) : ItemsUiState

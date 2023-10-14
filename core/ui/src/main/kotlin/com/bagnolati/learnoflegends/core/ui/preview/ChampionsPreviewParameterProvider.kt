@@ -2,8 +2,8 @@ package com.bagnolati.learnoflegends.core.ui.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.bagnolati.learnoflegends.core.model.Champion
-import com.bagnolati.learnoflegends.core.ui.preview.PreviewParameterData.ahriChampionPreview
-import com.bagnolati.learnoflegends.core.ui.preview.PreviewParameterData.qiyanaChampionPreview
+import com.bagnolati.learnoflegends.core.ui.preview.PreviewParameterChampions.ahriChampionPreview
+import com.bagnolati.learnoflegends.core.ui.preview.PreviewParameterChampions.qiyanaChampionPreview
 
 
 /*
@@ -19,7 +19,7 @@ class ChampionsPreviewParameterProvider : PreviewParameterProvider<List<Champion
         )
 }
 
-internal object PreviewParameterData {
+internal object PreviewParameterChampions {
     /**
      * Fake data of a [Champion.ImageUrl] for preview
      */

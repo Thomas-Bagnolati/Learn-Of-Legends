@@ -24,11 +24,11 @@ import com.bagnolati.learnoflegends.core.ui.preview.DevicesPreviews
 import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.core.ui.theme.spacing
+import com.bagnolati.learnoflegends.core.ui.util.asTextNumber
 import com.bagnolati.learnoflegends.feature.champions.component.ChampionHeader
 import com.bagnolati.learnoflegends.feature.champions.component.ChampionOrder
 import com.bagnolati.learnoflegends.feature.champions.component.ChampionOrderColumn
 import com.bagnolati.learnoflegends.feature.champions.component.ChampionRowItem
-import com.bagnolati.learnoflegends.feature.champions.component.asTextNumber
 import com.bagnolati.learnoflegends.feature.champions.component.getStatByOrder
 import kotlinx.coroutines.delay
 import java.util.*
@@ -137,7 +137,7 @@ internal fun ChampionsScreen(
                         SearchRowSection(
                             modifier = Modifier.imePadding(),
                             opened = isSearchRowOpened,
-                            onClickSearchFab = {
+                            onClick = {
                                 isSearchRowOpened = !isSearchRowOpened
                                 if (isSearchRowOpened.not()) onCloseSearchRow()
                             },
@@ -169,7 +169,7 @@ internal fun ChampionsScreen(
             // TODO : change to snackbar (we don't want to lock user screen).
             is ChampionsUiState.Error -> ErrorAlertDialog(
                 message = championsUiState.error?.message,
-                onClickRetry = onClickErrorRefresh
+                onConfirmDialogError = onClickErrorRefresh
             )
         }
     }

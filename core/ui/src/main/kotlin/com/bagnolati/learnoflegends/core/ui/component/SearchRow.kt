@@ -24,13 +24,20 @@ import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.core.ui.theme.spacing
 
+/**
+ * Is a Search View, it's a combination between [FloatingActionButton] 
+ * and [OutlinedTextField]
+ * 
+ * @param opened The state of the [SearchRowSection]
+ * @param onClick The click on the [FloatingActionButton]
+ */
 @Composable
 fun SearchRowSection(
     modifier: Modifier = Modifier,
     opened: Boolean,
     searchQuery: String,
     onSearchQueryChange: (String) -> Unit,
-    onClickSearchFab: () -> Unit,
+    onClick: () -> Unit,
     onSubmitKeyboard: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
@@ -42,7 +49,6 @@ fun SearchRowSection(
         if (opened) {
             // Focus text input when displayed
             LaunchedEffect(Unit) { focusRequester.requestFocus() }
-
             OutlinedTextField(
                 modifier = Modifier
                     .weight(1f)
@@ -66,9 +72,9 @@ fun SearchRowSection(
                 bottom = MaterialTheme.spacing.floatingActionButton,
                 end = MaterialTheme.spacing.floatingActionButton
             ),
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            onClick = onClickSearchFab,
+            contentColor = MaterialTheme.colorScheme.primaryContainer,
+            containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            onClick = onClick,
         ) {
             Icon(
                 imageVector = if (opened) LolIcons.Close else LolIcons.Search,
@@ -86,7 +92,7 @@ private fun SearchRowPreview() {
         SearchRowSection(
             opened = true,
             searchQuery = "Search query",
-            onClickSearchFab = {},
+            onClick = {},
             onSearchQueryChange = {},
             onSubmitKeyboard = {}
         )

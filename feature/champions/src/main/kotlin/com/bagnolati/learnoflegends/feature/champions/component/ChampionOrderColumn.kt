@@ -207,14 +207,6 @@ enum class ChampionOrder(
     ATTACK_SPEED_LVL(completeName = R.string.order_as_lvl_complete, shortName = R.string.order_as_lvl_short),
 }
 
-/**
- * Format Double to String as number
- */
-fun Double.asTextNumber(): String {
-    val asString = toString()
-    return if (asString.endsWith(".0")) toInt().toString()
-    else asString
-}
 
 /**
  * Get corresponding stat by [ChampionOrder]
