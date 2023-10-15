@@ -9,6 +9,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -16,17 +18,18 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.core.ui.component.ErrorAlertDialog
 import com.bagnolati.learnoflegends.core.ui.component.LoadingView
+import com.bagnolati.learnoflegends.core.ui.component.SearchRowSection
 import com.bagnolati.learnoflegends.core.ui.preview.ChampionsPreviewParameterProvider
 import com.bagnolati.learnoflegends.core.ui.preview.DevicesPreviews
 import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.core.ui.theme.spacing
+import com.bagnolati.learnoflegends.core.ui.util.asTextNumber
 import com.bagnolati.learnoflegends.feature.champions.component.ChampionHeader
 import com.bagnolati.learnoflegends.feature.champions.component.ChampionOrder
 import com.bagnolati.learnoflegends.feature.champions.component.ChampionOrderColumn
 import com.bagnolati.learnoflegends.feature.champions.component.ChampionRowItem
-import com.bagnolati.learnoflegends.feature.champions.component.SearchRowSection
-import com.bagnolati.learnoflegends.feature.champions.component.getStatByOrderAsString
+import com.bagnolati.learnoflegends.feature.champions.component.getStatByOrder
 import kotlinx.coroutines.delay
 import java.util.*
 import kotlin.time.Duration.Companion.seconds
@@ -64,6 +67,8 @@ internal fun ChampionsScreen(
     onSubmitKeyboard: () -> Unit,
     onCloseSearchRow: () -> Unit
 ) {
+    val density = LocalDensity.current
+
     var expandFabOrder by remember { mutableStateOf(true) }
     var isSearchRowOpened by remember { mutableStateOf(false) }
     var isOrderMenuOpened by remember { mutableStateOf(false) }
@@ -72,6 +77,7 @@ internal fun ChampionsScreen(
     val isScrollInProgress by remember {
         derivedStateOf { lazyListState.isScrollInProgress }
     }
+    var fabHeight by remember { mutableStateOf(0.dp) }
 
     // Collapse floating action button on scroll
     LaunchedEffect(isScrollInProgress) {
@@ -94,8 +100,8 @@ internal fun ChampionsScreen(
                         selectedChampion = championsUiState.selectedChampion,
                         order = championsUiState.selectedChampionOrder,
                         onClick = { onClickHeaderChampion(championsUiState.selectedChampion) },
-                        minStatValue = championsUiState.minStatValue,
-                        maxStatValue = championsUiState.maxStatValue
+                        minStatValue = championsUiState.minStatOfOrder,
+                        maxStatValue = championsUiState.maxStatOfOrder
                     )
                     LazyColumnChampions(
                         modifier = Modifier,
@@ -106,7 +112,9 @@ internal fun ChampionsScreen(
                         order = championsUiState.selectedChampionOrder,
                         contentPadding =
                         PaddingValues(
-                            bottom = WindowInsets.safeDrawing.asPaddingValues().calculateBottomPadding(),
+                            bottom = WindowInsets.safeDrawing.asPaddingValues().calculateBottomPadding()
+                                    // Add padding of floating action buttons height only when fab are closed
+                                    + if (!isSearchRowOpened && !isOrderMenuOpened) fabHeight else 0.dp,
                             top = MaterialTheme.spacing.verticalContent
                         )
                     )
@@ -117,7 +125,11 @@ internal fun ChampionsScreen(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .animateContentSize()
-                        .navigationBarsPadding(),
+                        .navigationBarsPadding()
+                        .onGloballyPositioned {
+                            if (!isOrderMenuOpened && !isSearchRowOpened)
+                                fabHeight = with(density) { it.size.height.toDp() }
+                        },
                     verticalArrangement = Arrangement.Bottom,
                     horizontalAlignment = Alignment.End,
                 ) {
@@ -125,7 +137,7 @@ internal fun ChampionsScreen(
                         SearchRowSection(
                             modifier = Modifier.imePadding(),
                             opened = isSearchRowOpened,
-                            onClickSearchFab = {
+                            onClick = {
                                 isSearchRowOpened = !isSearchRowOpened
                                 if (isSearchRowOpened.not()) onCloseSearchRow()
                             },
@@ -157,7 +169,7 @@ internal fun ChampionsScreen(
             // TODO : change to snackbar (we don't want to lock user screen).
             is ChampionsUiState.Error -> ErrorAlertDialog(
                 message = championsUiState.error?.message,
-                onClickRetry = onClickErrorRefresh
+                onConfirmDialogError = onClickErrorRefresh
             )
         }
     }
@@ -191,10 +203,7 @@ private fun LazyColumnChampions(
             val selected = indexOfSelectedChampion == index
             ChampionRowItem(
                 modifier = Modifier.animateItemPlacement(),
-                value = champion.getStatByOrderAsString(
-                    order = order,
-                    indexOnList = index
-                ),
+                value = champion.getStatByOrder(order).asTextNumber(),
                 champion = champion,
                 onClick = onClickChampion,
                 selected = selected,
@@ -217,9 +226,9 @@ private fun ChampionScreenPreview(
                     champions = champions,
                     selectedChampionOrder = ChampionOrder.ALPHABETIC,
                     selectedChampion = null,
+                    minStatOfOrder = 20.0,
+                    maxStatOfOrder = 200.0,
                     indexOfSelectedChampion = null,
-                    minStatValue = 20.0,
-                    maxStatValue = 200.0,
                     searchQuery = ""
                 ),
                 onClickChampionOrder = {},

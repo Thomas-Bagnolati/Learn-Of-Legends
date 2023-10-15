@@ -22,7 +22,7 @@ import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 @Composable
 fun ErrorAlertDialog(
     message: String?,
-    onClickRetry: () -> Unit
+    onConfirmDialogError: () -> Unit
 ) {
     AlertDialog(
         title = { Text(text = "Error", color = MaterialTheme.colorScheme.onErrorContainer) },
@@ -31,7 +31,7 @@ fun ErrorAlertDialog(
         confirmButton = {
             Button(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = onClickRetry,
+                onClick = onConfirmDialogError,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error,
                     contentColor = MaterialTheme.colorScheme.onError
@@ -59,7 +59,7 @@ private fun ErrorDialogAlertPreview() {
         Surface {
             ErrorAlertDialog(
                 message = "Error occurred",
-                onClickRetry = {}
+                onConfirmDialogError = {}
             )
         }
     }

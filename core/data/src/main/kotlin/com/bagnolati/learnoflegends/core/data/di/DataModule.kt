@@ -2,6 +2,8 @@ package com.bagnolati.learnoflegends.core.data.di
 
 import com.bagnolati.learnoflegends.core.data.repository.ChampionRepository
 import com.bagnolati.learnoflegends.core.data.repository.ChampionRepositoryImpl
+import com.bagnolati.learnoflegends.core.data.repository.ItemRepository
+import com.bagnolati.learnoflegends.core.data.repository.ItemRepositoryImpl
 import com.bagnolati.learnoflegends.core.data.repository.UserDataRepository
 import com.bagnolati.learnoflegends.core.data.repository.UserDataRepositoryImpl
 import com.bagnolati.learnoflegends.core.data.util.ConnectivityManagerNetworkMonitor
@@ -24,6 +26,11 @@ interface DataModule {
     fun bindsChampionRepository(
         championRepositoryImpl: ChampionRepositoryImpl
     ): ChampionRepository
+
+    @Binds
+    fun bindsItemRepository(
+        itemRepositoryImpl: ItemRepositoryImpl
+    ): ItemRepository
 
     @Binds
     fun bindsNetworkMonitor(

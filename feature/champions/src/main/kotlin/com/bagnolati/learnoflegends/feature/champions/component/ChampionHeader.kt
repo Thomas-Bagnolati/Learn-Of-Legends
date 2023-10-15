@@ -1,6 +1,5 @@
 package com.bagnolati.learnoflegends.feature.champions.component
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
@@ -20,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -29,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.StrokeCap
@@ -38,7 +35,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.core.ui.component.DynamicAsyncImage
@@ -46,6 +42,9 @@ import com.bagnolati.learnoflegends.core.ui.preview.ChampionsPreviewParameterPro
 import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.core.ui.theme.spacing
+import com.bagnolati.learnoflegends.core.ui.util.asTextNumber
+import com.bagnolati.learnoflegends.core.ui.util.bottomShadow
+import com.bagnolati.learnoflegends.core.ui.util.calculateProgressValue
 import com.bagnolati.learnoflegends.core.ui.R as uiR
 
 @Composable
@@ -124,40 +123,36 @@ internal fun ChampionHeader(
                             style = MaterialTheme.typography.titleMedium,
                         )
                         Text(
-                            text = selectedChampion.getStatByOrderAsString(order),
+                            text = selectedChampion.getStatByOrder(order).asTextNumber(),
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    AnimatedVisibility(order != ChampionOrder.ALPHABETIC) {
-                        StatProgressBar(
-                            progress = calculateProgressValue(
-                                selectedChampion.getStatByOrderAsDouble(order),
-                                minStatValue,
-                                maxStatValue
-                            ) ?: 0f
-                        )
-                    }
+                    StatProgressBar(
+                        progress = calculateProgressValue(
+                            selectedChampion.getStatByOrder(order),
+                            minStatValue,
+                            maxStatValue
+                        ) ?: 0f
+                    )
                     Spacer(modifier = Modifier.height(2.dp))
 
-                    AnimatedVisibility(order != ChampionOrder.ALPHABETIC) {
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 6.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = minStatValue.numberToString(),
-                                style = MaterialTheme.typography.labelMedium.copy(fontStyle = FontStyle.Italic),
-                            )
-                            Text(
-                                text = maxStatValue.numberToString(),
-                                style = MaterialTheme.typography.labelMedium.copy(fontStyle = FontStyle.Italic),
-                            )
-                        }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                        Text(
+                            text = minStatValue.asTextNumber(),
+                            style = MaterialTheme.typography.labelMedium.copy(fontStyle = FontStyle.Italic),
+                        )
+                        Text(
+                            text = maxStatValue.asTextNumber(),
+                            style = MaterialTheme.typography.labelMedium.copy(fontStyle = FontStyle.Italic),
+                        )
 
                     }
                 }
@@ -274,37 +269,3 @@ private fun ChampionHeaderPreview(
         )
     }
 }
-
-/**
- * Calculate progress value for ProgressBar of the value compared to min and max values.
- *
- * @param value is the stat value.
- * @param minValue it the min value of all champions.
- * @param maxValue it the max value of all champions.
- *
- * @return progress value or null.
- */
-private fun calculateProgressValue(
-    value: Double,
-    minValue: Double,
-    maxValue: Double
-): Float? {
-    return try {
-        ((value - minValue) / (maxValue - minValue)).toFloat()
-    } catch (e: Exception) {
-        e.printStackTrace()
-        null
-    }
-}
-
-/**
- * Add shadow only on bottom.
- */
-fun Modifier.bottomShadow(shadow: Dp) =
-    this
-        .clip(GenericShape { size, _ ->
-            lineTo(size.width, 0f)
-            lineTo(size.width, Float.MAX_VALUE)
-            lineTo(0f, Float.MAX_VALUE)
-        })
-        .shadow(shadow)

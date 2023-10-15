@@ -9,9 +9,17 @@ import java.util.Locale
 
 
 /**
+ * Map list Of [NetworkChampion] to list of [Champion]
+ */
+fun List<NetworkChampion>.asChampions(): List<Champion> =
+    mapIndexed { index, networkChampion ->
+        networkChampion.asChampion(index)
+    }
+
+/**
  * Map [NetworkChampion] to [Champion]
  */
-fun NetworkChampion.asChampion(): Champion {
+fun NetworkChampion.asChampion(index: Int? = null): Champion {
     return Champion(
         id = id,
         name = name,
@@ -22,7 +30,7 @@ fun NetworkChampion.asChampion(): Champion {
         enemyTips = enemytips,
         tags = tags.map { it.asTag() },
         imageUrl = image.asImage(),
-        stats = stats.asStats(),
+        stats = stats.asStats(index ?: 0),
         passive = passive?.asPassive(),
         spells = spells.map { it.asSpell() },
         skins = skins.map { it.asSkin(full = image.full) }
@@ -80,26 +88,30 @@ fun NetworkChampion.NetworkPassive.asPassive(): Champion.Passive {
 
 /**
  * Map [NetworkChampion.NetworkStats] to [Champion.Stats]
+ *
+ * All stats as Double to easily can play with it.
+ * @param index to retrieve alphabetic position.
  */
-fun NetworkChampion.NetworkStats.asStats(): Champion.Stats {
+fun NetworkChampion.NetworkStats.asStats(index: Int): Champion.Stats {
     return Champion.Stats(
-        hp = hp,
-        hpPerLevel = hpperlevel,
+        alphabetic = (index + 1).toDouble(),
+        hp = hp.toDouble(),
+        hpPerLevel = hpperlevel.toDouble(),
         mp = mp,
         mpPerLevel = mpperlevel,
-        moveSpeed = movespeed,
-        armor = armor,
+        moveSpeed = movespeed.toDouble(),
+        armor = armor.toDouble(),
         armorPerLevel = armorperlevel,
-        spellBlock = spellblock,
+        spellBlock = spellblock.toDouble(),
         spellBlockPerLevel = spellblockperlevel,
-        attackRange = attackrange,
+        attackRange = attackrange.toDouble(),
         hpRegen = hpregen,
         hpRegenPerLevel = hpregenperlevel,
         mpRegen = mpregen,
         mpRegenPerLevel = mpregenperlevel,
-        crit = crit,
-        critPerLevel = critperlevel,
-        attackDamage = attackdamage,
+        crit = crit.toDouble(),
+        critPerLevel = critperlevel.toDouble(),
+        attackDamage = attackdamage.toDouble(),
         attackDamagePerLevel = attackdamageperlevel,
         attackSpeedPerLevel = attackspeedperlevel,
         attackSpeed = attackspeed,
@@ -150,4 +162,4 @@ fun String.htmlToString(): String =
 /**
  * Safely capitalize String.
  */
-fun String.capitalize() = this.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+fun String.capitalize() = this.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }

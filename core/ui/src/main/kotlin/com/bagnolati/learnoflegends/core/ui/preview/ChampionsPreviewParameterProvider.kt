@@ -2,8 +2,8 @@ package com.bagnolati.learnoflegends.core.ui.preview
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.bagnolati.learnoflegends.core.model.Champion
-import com.bagnolati.learnoflegends.core.ui.preview.PreviewParameterData.ahriChampionPreview
-import com.bagnolati.learnoflegends.core.ui.preview.PreviewParameterData.qiyanaChampionPreview
+import com.bagnolati.learnoflegends.core.ui.preview.PreviewParameterChampions.ahriChampionPreview
+import com.bagnolati.learnoflegends.core.ui.preview.PreviewParameterChampions.qiyanaChampionPreview
 
 
 /*
@@ -19,7 +19,7 @@ class ChampionsPreviewParameterProvider : PreviewParameterProvider<List<Champion
         )
 }
 
-internal object PreviewParameterData {
+internal object PreviewParameterChampions {
     /**
      * Fake data of a [Champion.ImageUrl] for preview
      */
@@ -83,23 +83,24 @@ internal object PreviewParameterData {
      * Fake data of a [Champion.Stats] for preview
      */
     private val championStatPreview = Champion.Stats(
-        hp = 590,
-        hpPerLevel = 124,
+        alphabetic = 1.0,
+        hp = 590.0,
+        hpPerLevel = 124.0,
         mp = 320.0,
         mpPerLevel = 50.0,
-        moveSpeed = 335,
-        armor = 28,
+        moveSpeed = 335.0,
+        armor = 28.0,
         armorPerLevel = 4.7,
-        spellBlock = 32,
+        spellBlock = 32.0,
         spellBlockPerLevel = 2.05,
-        attackRange = 150,
+        attackRange = 150.0,
         hpRegen = 6.0,
         hpRegenPerLevel = 0.9,
         mpRegen = 8.0,
         mpRegenPerLevel = 0.7,
-        crit = 0,
-        critPerLevel = 0,
-        attackDamage = 66,
+        crit = 0.0,
+        critPerLevel = 0.0,
+        attackDamage = 66.0,
         attackDamagePerLevel = 3.1,
         attackSpeedPerLevel = 2.1,
         attackSpeed = 0.68,
