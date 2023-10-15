@@ -33,8 +33,6 @@ android {
             isDebuggable = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             // SignIn is done on GitHub workflow to hide keys.
-
-            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
