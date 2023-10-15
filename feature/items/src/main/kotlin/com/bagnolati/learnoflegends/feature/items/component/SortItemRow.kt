@@ -1,6 +1,8 @@
 package com.bagnolati.learnoflegends.feature.items.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
@@ -8,9 +10,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.bagnolati.learnoflegends.core.ui.icon.LolIcons
 import com.bagnolati.learnoflegends.feature.items.ItemsSort
-import com.bagnolati.nutrigood.core.domain.mapper.capitalize
 
 @Composable
 fun SortItemRow(
@@ -22,17 +26,24 @@ fun SortItemRow(
         modifier = Modifier.clickable { onClick() },
         headlineContent = {
             Text(
-                text = sort.name.capitalize()
-                    .replace("_", " "),
+                text = stringResource(id = sort.titleRes),
                 color = if (selected) MaterialTheme.colorScheme.onSecondaryContainer
                 else MaterialTheme.colorScheme.onSurface
             )
         },
         leadingContent = {
-            Icon(
-                LolIcons.Filter,
-                contentDescription = null,
-            )
+            if (sort.icon != null)
+                Image(
+                    modifier = Modifier.size(24.dp),
+                    painter = painterResource(id = sort.icon),
+                    contentDescription = null
+                )
+            else
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    imageVector = LolIcons.Filter,
+                    contentDescription = null,
+                )
         },
         colors = ListItemDefaults.colors(
             containerColor =

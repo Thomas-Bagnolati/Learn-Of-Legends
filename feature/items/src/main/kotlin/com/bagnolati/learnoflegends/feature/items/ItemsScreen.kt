@@ -6,19 +6,16 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
@@ -66,6 +63,8 @@ import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.core.ui.theme.spacing
 import com.bagnolati.learnoflegends.feature.items.component.ItemCard
+import com.bagnolati.learnoflegends.feature.items.component.ItemDetailDialog
+import com.bagnolati.learnoflegends.feature.items.component.SortInfoRow
 import com.bagnolati.learnoflegends.feature.items.component.SortItemRow
 import com.bagnolati.nutrigood.core.domain.mapper.capitalize
 import kotlinx.coroutines.delay
@@ -86,7 +85,7 @@ internal fun ItemsRoute(
         onSearchQueryChange = viewModel::onSearchQueryChange,
         onConfirmDialogError = viewModel::fetchItems,
         onSelectSort = viewModel::selectSort,
-        onClickItem = { /*TODO*/ }
+        onClickItem = viewModel::selectItem
     )
 
 }
@@ -108,10 +107,11 @@ internal fun ItemsScreen(
 
     var openSearchRow by remember { mutableStateOf(false) }
     var openModal by remember { mutableStateOf(false) }
+    var openItemDialog by remember { mutableStateOf(false) }
 
-    val lazyListState = rememberLazyListState()
+    val lazyItemsState = rememberLazyListState()
     val isScrollInProgress by remember {
-        derivedStateOf { lazyListState.isScrollInProgress }
+        derivedStateOf { lazyItemsState.isScrollInProgress }
     }
 
     val categories = listOf<Category>(
@@ -149,7 +149,7 @@ internal fun ItemsScreen(
                     AnimatedVisibility(
                         visible = itemsUiState.sort != ItemsSort.DEFAULT
                     ) {
-                        SortInfo(itemsUiState)
+                        SortInfoRow(itemsUiState.sort)
                     }
 
                     LazyVerticalGrid(
@@ -175,7 +175,10 @@ internal fun ItemsScreen(
                                 category = category,
                                 itemsUiState = itemsUiState,
                                 celleSize = cellSize,
-                                onClickItem = onClickItem
+                                onClickItem = {
+                                    onClickItem(it)
+                                    openItemDialog = true
+                                }
                             )
 
                         }
@@ -219,16 +222,10 @@ internal fun ItemsScreen(
                                     bottom = MaterialTheme.spacing.floatingActionButton,
                                     end = MaterialTheme.spacing.floatingActionButton
                                 ),
-                            text = {
-                                Text(text = "Sort")
-                            },
-                            onClick = {
-                                openModal = true
-                            },
+                            text = { Text(text = "Sort") },
+                            onClick = { openModal = true },
                             expanded = expandSortFab,
-                            icon = {
-                                Icon(imageVector = LolIcons.Filter, contentDescription = null)
-                            },
+                            icon = { Icon(imageVector = LolIcons.Filter, contentDescription = null) },
                             contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
                             containerColor = MaterialTheme.colorScheme.primaryContainer
                         )
@@ -236,7 +233,6 @@ internal fun ItemsScreen(
 
                 }
 
-                val itemsSort = ItemsSort.values()
                 val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
                 val coroutineScope = rememberCoroutineScope()
                 val sortsLazyState = rememberLazyListState()
@@ -258,30 +254,31 @@ internal fun ItemsScreen(
                         sheetState = sheetState,
                         onDismissRequest = { openModal = false }
                     ) {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxHeight(0.5f),
-                            state = sortsLazyState,
-                            contentPadding = PaddingValues(
-                                MaterialTheme.spacing.contentLazyColum
-                            )
-                        ) {
-                            itemsIndexed(itemsSort) { index, sort ->
-                                if (index != 0) Divider()
 
-                                SortItemRow(
-                                    selected = itemsUiState.sort == sort,
-                                    sort = sort,
-                                    onClick = {
-                                        coroutineScope.launch {
-                                            sheetState.hide()
-                                            openModal = false
-                                        }
-                                        onSelectSort(sort)
-                                    }
-                                )
+                        SortLazyColumn(
+                            sortsLazyState = sortsLazyState,
+                            selectedSort = itemsUiState.sort,
+                            onSelectSort = {
+                                onSelectSort(it)
+
+                                coroutineScope.launch {
+                                    sheetState.hide()
+                                    openModal = false
+                                }
                             }
-                        }
+                        )
+
                     }
+
+
+                if (openItemDialog) {
+                    itemsUiState.selectedItem?.let {
+                        ItemDetailDialog(
+                            item = itemsUiState.selectedItem,
+                            onDismissRequest = { openItemDialog = false }
+                        )
+                    }
+                }
             }
 
             is ItemsUiState.Error -> ErrorAlertDialog(
@@ -290,31 +287,33 @@ internal fun ItemsScreen(
             )
 
             ItemsUiState.Loading -> LoadingView()
+
         }
     }
 }
 
 @Composable
-private fun SortInfo(itemsUiState: ItemsUiState.Success) {
-    Surface(
-        modifier = Modifier.fillMaxWidth(),
-        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-        color = MaterialTheme.colorScheme.secondaryContainer,
-        shadowElevation = 5.dp
+private fun SortLazyColumn(
+    sortsLazyState: LazyListState,
+    selectedSort: ItemsSort,
+    onSelectSort: (ItemsSort) -> Unit
+) {
+    // List of all sorts
+    val itemsSort = ItemsSort.values()
+
+    LazyColumn(
+        modifier = Modifier.fillMaxHeight(0.5f),
+        state = sortsLazyState,
+        contentPadding = PaddingValues(
+            MaterialTheme.spacing.contentLazyColum
+        )
     ) {
-        Row(
-            Modifier.padding(
-                vertical = 12.dp, horizontal = MaterialTheme.spacing.horizontalContent
-            ),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "Sort :", style = MaterialTheme.typography.titleMedium,
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                text = itemsUiState.sort.name.capitalize().replace("_", " "),
-                style = MaterialTheme.typography.bodyLarge,
+        itemsIndexed(itemsSort) { index, sort ->
+            if (index != 0) Divider()
+            SortItemRow(
+                selected = selectedSort == sort,
+                sort = sort,
+                onClick = { onSelectSort(sort) }
             )
         }
     }
@@ -396,7 +395,8 @@ private fun ItemScreenPreview(
                 itemsUiState = ItemsUiState.Success(
                     items = items,
                     searchQuery = "",
-                    sort = ItemsSort.FLAT_ARMOR
+                    sort = ItemsSort.FLAT_ARMOR,
+                    selectedItem = items.first()
                 ),
                 onSearchQueryChange = {},
                 onConfirmDialogError = {},

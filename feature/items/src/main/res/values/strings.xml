@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="items">Items</string>
+
+    <string name="sort_default">Default</string>
+
+    <string name="sort_gold">Price</string>
+    <string name="sort_hp">Health</string>
+    <string name="sort_mp">Mana</string>
+    <string name="sort_armor">Armor</string>
+    <string name="sort_magic_resist">Magic resistance</string>
+    <string name="sort_move_speed">Move speed</string>
+    <string name="sort_move_speed_percent">Move speed %</string>
+    <string name="sort_ad">Attack damage</string>
+    <string name="sort_ap">Ability power</string>
+    <string name="sort_crit_chance">Critical chance %</string>
+    <string name="sort_attack_speed">Attack speed %</string>
+    <string name="sort_lifesteal">Life steal %</string>
 </resources>

@@ -25,7 +25,7 @@ data class Item(
     )
 
     data class Image(
-        val full: String,
+        val full: String?,
     )
 
     data class Maps(

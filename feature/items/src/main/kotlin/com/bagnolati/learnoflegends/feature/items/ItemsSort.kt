@@ -1,21 +1,27 @@
 package com.bagnolati.learnoflegends.feature.items
 
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import com.bagnolati.learnoflegends.core.model.Item
+import com.bagnolati.learnoflegends.core.ui.R as uiR
 
-enum class ItemsSort {
-    DEFAULT,
-    GOLD,
-    FLAT_HP_POOL,
-    FLAT_MP_POOL,
-    FLAT_ARMOR,
-    FLAT_MAGIC_RESIST,
-    FLAT_MOVEMENT_SPEED,
-    PERCENT_MOVEMENT_SPEED,
-    FLAT_PHYSICAL_DAMAGE,
-    FLAT_MAGIC_DAMAGE,
-    FLAT_CRIT_CHANCE,
-    PERCENT_ATTACK_SPEED,
-    PERCENT_LIFESTEAL,
+enum class ItemsSort(
+    @StringRes val titleRes: Int,
+    @DrawableRes val icon: Int?
+) {
+    DEFAULT(titleRes = R.string.sort_default, icon = null),
+    GOLD(titleRes = R.string.sort_gold, icon = uiR.drawable.gold_icon),
+    FLAT_MAGIC_DAMAGE(titleRes = R.string.sort_ap, icon = uiR.drawable.stat_ability_power_icon),
+    FLAT_PHYSICAL_DAMAGE(titleRes = R.string.sort_ad, icon = uiR.drawable.stat_attack_damage_icon),
+    PERCENT_ATTACK_SPEED(titleRes = R.string.sort_attack_speed, icon = uiR.drawable.stat_attack_speed_icon),
+    PERCENT_LIFESTEAL(titleRes = R.string.sort_lifesteal, icon = uiR.drawable.stat_lifesteal_icon),
+    FLAT_CRIT_CHANCE(titleRes = R.string.sort_crit_chance, icon = uiR.drawable.stat_crit_icon),
+    FLAT_HP_POOL(titleRes = R.string.sort_hp, icon = uiR.drawable.stat_health_scaling_icon),
+    FLAT_MP_POOL(titleRes = R.string.sort_mp, icon = uiR.drawable.stat_mana_icon),
+    FLAT_ARMOR(titleRes = R.string.sort_armor, icon = uiR.drawable.stat_armor_icon),
+    FLAT_MAGIC_RESIST(titleRes = R.string.sort_magic_resist, icon = uiR.drawable.stat_magic_res_icon),
+    FLAT_MOVEMENT_SPEED(titleRes = R.string.sort_move_speed, icon = uiR.drawable.stat_movement_speed_icon),
+    PERCENT_MOVEMENT_SPEED(titleRes = R.string.sort_move_speed_percent, icon = uiR.drawable.stat_movement_speed_icon),
 }
 
 fun Item.getStatBySortItem(sort: ItemsSort): Double {

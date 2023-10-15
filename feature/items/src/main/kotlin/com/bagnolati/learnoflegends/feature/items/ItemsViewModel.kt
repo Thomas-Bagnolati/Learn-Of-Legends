@@ -23,6 +23,7 @@ class ItemsViewModel @Inject constructor(
 
     private val itemsResponse = MutableStateFlow<Result<List<Item>>>(Result.Loading)
     private val searchQuery: MutableStateFlow<String> = MutableStateFlow("")
+    private val itemSelected: MutableStateFlow<Item?> = MutableStateFlow(null)
     private val sort: MutableStateFlow<ItemsSort> = MutableStateFlow(ItemsSort.DEFAULT)
 
     val itemsUiState: StateFlow<ItemsUiState> =
@@ -52,12 +53,17 @@ class ItemsViewModel @Inject constructor(
         sort.update { itemsSort }
     }
 
+    fun selectItem(item: Item) {
+        itemSelected.update { item }
+    }
+
     private fun itemsUiState(): Flow<ItemsUiState> {
         return combine(
             itemsResponse,
             searchQuery,
-            sort
-        ) { result: Result<List<Item>>, query: String, sort: ItemsSort ->
+            sort,
+            itemSelected
+        ) { result: Result<List<Item>>, query: String, sort: ItemsSort, itemSelected: Item? ->
             when (result) {
                 is Result.Success -> {
                     val filteredItems = result.data
@@ -73,7 +79,8 @@ class ItemsViewModel @Inject constructor(
                     ItemsUiState.Success(
                         items = filteredItems,
                         searchQuery = query,
-                        sort = sort
+                        sort = sort,
+                        selectedItem = itemSelected
                     )
                 }
 
@@ -91,6 +98,7 @@ interface ItemsUiState {
     object Loading : ItemsUiState
     data class Success(
         val items: List<Item>,
+        val selectedItem: Item?,
         val searchQuery: String,
         val sort: ItemsSort
     ) : ItemsUiState
