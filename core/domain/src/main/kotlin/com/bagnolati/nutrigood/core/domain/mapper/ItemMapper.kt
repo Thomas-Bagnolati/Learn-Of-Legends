@@ -154,8 +154,8 @@ fun NetworkItem.NetworkStats.asStats(): Item.Stats = Item.Stats(
     flatArmorMod = flatArmorMod,
     flatAttackSpeedMod = flatAttackSpeedMod,
     flatBlockMod = flatBlockMod,
-    flatCritChanceMod = flatCritChanceMod,
-    flatCritDamageMod = flatCritDamageMod,
+    flatCritChanceMod = flatCritChanceMod.asPercent(),
+    flatCritDamageMod = flatCritDamageMod.asPercent(),
     flatEXPBonus = flatEXPBonus,
     flatEnergyPoolMod = flatEnergyPoolMod,
     flatEnergyRegenMod = flatEnergyRegenMod,
@@ -187,8 +187,8 @@ fun NetworkItem.NetworkStats.asStats(): Item.Stats = Item.Stats(
     rFlatArmorModPerLevel = rFlatArmorModPerLevel,
     rFlatArmorPenetrationMod = rFlatArmorPenetrationMod,
     rFlatArmorPenetrationModPerLevel = rFlatArmorPenetrationModPerLevel,
-    rFlatCritChanceModPerLevel = rFlatCritChanceModPerLevel,
-    rFlatCritDamageModPerLevel = rFlatCritDamageModPerLevel,
+    rFlatCritChanceModPerLevel = rFlatCritChanceModPerLevel.asPercent(),
+    rFlatCritDamageModPerLevel = rFlatCritDamageModPerLevel.asPercent(),
     rFlatDodgeMod = rFlatDodgeMod,
     rFlatDodgeModPerLevel = rFlatDodgeModPerLevel,
     rFlatEnergyModPerLevel = rFlatEnergyModPerLevel,
@@ -217,6 +217,7 @@ fun NetworkItem.NetworkStats.asStats(): Item.Stats = Item.Stats(
     rPercentTimeDeadMod = rPercentTimeDeadMod?.asPercent(),
     rPercentTimeDeadModPerLevel = rPercentTimeDeadModPerLevel?.asPercent()
 )
+
 
 fun Double?.asPercent(): Double? {
     if (this == null) return null

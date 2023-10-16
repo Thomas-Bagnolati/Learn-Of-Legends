@@ -24,34 +24,39 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.bagnolati.learnoflegends.core.model.Item
 import com.bagnolati.learnoflegends.core.ui.component.DynamicAsyncImage
 import com.bagnolati.learnoflegends.core.ui.preview.ItemsPreviewParameterProvider
 import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
+import com.bagnolati.learnoflegends.core.ui.preview.manamunePreviewIndex
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
+import com.bagnolati.learnoflegends.core.ui.util.HtmlTags
 import com.bagnolati.learnoflegends.core.ui.util.asTextNumber
+import com.bagnolati.learnoflegends.core.ui.util.htmlToString
+import com.bagnolati.learnoflegends.core.ui.util.toHtmlAnnotatedString
 import com.bagnolati.learnoflegends.feature.items.ItemsSort
 import com.bagnolati.learnoflegends.feature.items.getStatBySortItem
-import com.bagnolati.nutrigood.core.domain.mapper.htmlToString
 import com.bagnolati.learnoflegends.core.ui.R as uiR
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemDetailDialog(item: Item, onDismissRequest: () -> Unit) {
-
     AlertDialog(onDismissRequest = onDismissRequest) {
         Card(
             onClick = onDismissRequest,
             colors = CardDefaults.cardColors(
                 MaterialTheme.colorScheme.surface
             ),
-
-            ) {
+        ) {
             Column(
                 modifier = Modifier
                     .padding(24.dp)
@@ -69,10 +74,10 @@ fun ItemDetailDialog(item: Item, onDismissRequest: () -> Unit) {
                 }
 
                 ItemsSort.values().forEach { sort ->
-
                     val stat = item.getStatBySortItem(sort)
-                    val shouldShowStat = (stat > 0.0 && sort != ItemsSort.DEFAULT && sort != ItemsSort.GOLD)
-                    if (shouldShowStat) {
+                    val showStat = (stat > 0.0 && sort != ItemsSort.DEFAULT && sort != ItemsSort.GOLD)
+
+                    if (showStat) {
                         Row(verticalAlignment = CenterVertically) {
                             if (sort.icon != null)
                                 Image(
@@ -85,7 +90,6 @@ fun ItemDetailDialog(item: Item, onDismissRequest: () -> Unit) {
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(text = stat.asTextNumber())
                         }
-
                     }
 
                 }
@@ -94,12 +98,14 @@ fun ItemDetailDialog(item: Item, onDismissRequest: () -> Unit) {
                 Divider()
                 Spacer(modifier = Modifier.height(22.dp))
 
-                Text(text = item.description.htmlToString(), style = MaterialTheme.typography.bodyMedium)
+                Text(
+                    text = item.description.toHtmlAnnotatedString(),
+                    style = MaterialTheme.typography.bodyMedium
+                )
 
             }
         }
     }
-
 }
 
 @Composable
@@ -147,7 +153,7 @@ private fun ItemDetailDialogPreview(
     LolTheme {
         Surface(Modifier.fillMaxSize()) {
             ItemDetailDialog(
-                item = items.first(),
+                item = items[manamunePreviewIndex],
                 onDismissRequest = {}
             )
         }

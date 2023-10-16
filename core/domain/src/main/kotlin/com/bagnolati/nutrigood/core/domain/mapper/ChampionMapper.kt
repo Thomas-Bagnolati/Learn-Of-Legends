@@ -1,6 +1,5 @@
 package com.bagnolati.nutrigood.core.domain.mapper
 
-import android.text.Html
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.core.network.DdragonUrl
 import com.bagnolati.learnoflegends.core.network.LeagueOfLegendsUrl
@@ -56,7 +55,7 @@ fun NetworkChampion.NetworkSpell.asSpell(): Champion.Spell {
     return Champion.Spell(
         id = id,
         name = name,
-        description = description.htmlToString(),
+        description = description,
         tooltip = tooltip,
         levelTip = Champion.Spell.LevelTip(label = leveltip?.label, effect = leveltip?.effect),
         maxRank = maxrank,
@@ -81,7 +80,7 @@ fun NetworkChampion.NetworkSpell.asSpell(): Champion.Spell {
 fun NetworkChampion.NetworkPassive.asPassive(): Champion.Passive {
     return Champion.Passive(
         name = name,
-        description = description.htmlToString(),
+        description = description,
         imageUrl = image.asImage()
     )
 }
@@ -152,12 +151,6 @@ fun NetworkChampion.NetworkSkin.asSkin(full: String): Champion.Skin {
     )
 }
 
-
-/**
- * Decode HTML String to Text
- */
-fun String.htmlToString(): String =
-    Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY).toString()
 
 /**
  * Safely capitalize String.

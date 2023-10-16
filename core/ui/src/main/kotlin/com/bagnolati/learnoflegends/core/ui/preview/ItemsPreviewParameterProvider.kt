@@ -4,6 +4,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.bagnolati.learnoflegends.core.model.Item
 
 
+
+const val DraktharrPreviewIndex = 0
+const val manamunePreviewIndex = 1
+
+
 /*
  * Provides list of [Champion] for Composable previews.
  */
@@ -11,11 +16,10 @@ class ItemsPreviewParameterProvider : PreviewParameterProvider<List<Item>> {
     override val values: Sequence<List<Item>>
         get() = sequenceOf(
             listOf(
-                PreviewParameterItems.draktharrItem.copy(id = 1),
-                PreviewParameterItems.draktharrItem.copy(id = 2),
-                PreviewParameterItems.draktharrItem.copy(id = 3),
-                PreviewParameterItems.draktharrItem.copy(id = 4),
-                PreviewParameterItems.draktharrItem.copy(id = 5),
+                PreviewParameterItems.draktharrItem,
+                PreviewParameterItems.manamuneItem,
+                PreviewParameterItems.draktharrItem,
+                PreviewParameterItems.manamuneItem,
             )
         )
 }
@@ -41,5 +45,31 @@ private object PreviewParameterItems {
             category = Item.Category.MYTHIC,
             depth = 3,
             maps = Item.Maps(summonersRift = true, aram = true, nexusBlitz = true, teamFightTactics = false, arena = false),
+        )
+
+    val manamuneItem = Item(
+        id = 5778,
+        name = "Manamune",
+        description = "<mainText><stats><attention>35</attention> Attack Damage<br><attention>500</attention> Mana<br><attention>15</attention> Ability Haste</stats><br><li><passive>Awe=</passive> Gain bonus <scaleAD>Attack Damage equal to your max Mana</scaleAD>. <li><passive>Mana Charge:</passive> Strike a target with an Ability or Attack to consume a charge and gain <scaleMana>3 bonus Mana</scaleMana>, doubled if the target is a champion. Grants a maximum of 360 Mana at which point this item transforms into <rarityLegendary>Muramana</rarityLegendary>.<br><br><rules>Gain a new <passive>Mana Charge</passive> every 8 seconds (max 4).</rules></mainText><br>",
+        colloq = "",
+        plaintext = "Increases Attack Damage based on maximum Mana",
+        from = listOf("3070", "3133", "1036"),
+        image = Item.Image(null),
+        gold = Item.Gold(base = 1050, purchasable = true, total = 2900, sell = 2030),
+        tags = listOf("Damage", "Mana", "CooldownReduction", "OnHit", "AbilityHaste"),
+        maps = Item.Maps(
+            summonersRift = true,
+            aram = true,
+            nexusBlitz = true,
+            teamFightTactics = false,
+            arena = false
+        ),
+        stats = Item.Stats(
+            flatPhysicalDamageMod = 35.0,
+            flatMPPoolMod = 500.0
+        ),
+        depth = 3,
+        category = Item.Category.LEGENDARY,
+
         )
 }

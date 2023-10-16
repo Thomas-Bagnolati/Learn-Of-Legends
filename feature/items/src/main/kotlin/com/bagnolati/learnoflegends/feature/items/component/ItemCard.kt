@@ -17,6 +17,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -42,9 +43,7 @@ fun ItemCard(
 ) {
     Card(
         modifier = modifier,
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp
-        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         shape = RoundedCornerShape(6.dp),
         onClick = { onClick(item) },
     ) {
@@ -52,12 +51,12 @@ fun ItemCard(
             Box(
                 modifier = Modifier.size(cellSize)
             ) {
-
                 AsyncImage(
                     modifier = Modifier.fillMaxSize(),
                     model = item.image.full,
                     contentDescription = null,
-                    placeholder = painterResource(id = R.drawable.ic_default_placeholder)
+                    placeholder = painterResource(id = R.drawable.ic_default_placeholder),
+                    contentScale = ContentScale.Crop
                 )
 
                 if (item.category == Item.Category.ORNN)

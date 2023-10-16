@@ -7,13 +7,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bagnolati.learnoflegends.core.ui.icon.LolIcons
+import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
+import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.feature.items.ItemsSort
 
 @Composable
@@ -53,3 +57,16 @@ fun SortItemRow(
     )
 }
 
+@ThemePreviews
+@Composable
+private fun SortItemRowPreview() {
+    LolTheme {
+        Surface {
+            SortItemRow(
+                sort =ItemsSort.PERCENT_ATTACK_SPEED,
+                onClick = {}
+            )
+        }
+    }
+
+}
