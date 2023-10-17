@@ -25,11 +25,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.bagnolati.learnoflegends.core.model.Item
-import com.bagnolati.learnoflegends.core.ui.R
 import com.bagnolati.learnoflegends.core.ui.preview.ItemsPreviewParameterProvider
 import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.core.ui.util.asTextNumber
+import com.bagnolati.learnoflegends.feature.items.R
+import com.bagnolati.learnoflegends.core.ui.R as uiR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,18 +52,19 @@ fun ItemCard(
             Box(
                 modifier = Modifier.size(cellSize)
             ) {
+
                 AsyncImage(
                     modifier = Modifier.fillMaxSize(),
                     model = item.image.full,
                     contentDescription = null,
-                    placeholder = painterResource(id = R.drawable.ic_default_placeholder),
+                    placeholder = painterResource(id = uiR.drawable.ic_default_placeholder),
                     contentScale = ContentScale.Crop
                 )
 
                 if (item.category == Item.Category.ORNN)
                     Image(
                         modifier = Modifier.fillMaxSize(),
-                        painter = painterResource(id = com.bagnolati.learnoflegends.feature.items.R.drawable.item_ornn_border),
+                        painter = painterResource(id = R.drawable.item_ornn_border),
                         contentDescription = null
                     )
 

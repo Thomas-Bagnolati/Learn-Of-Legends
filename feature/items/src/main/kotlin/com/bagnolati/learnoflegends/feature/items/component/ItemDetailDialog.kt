@@ -24,12 +24,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.bagnolati.learnoflegends.core.model.Item
@@ -38,10 +34,9 @@ import com.bagnolati.learnoflegends.core.ui.preview.ItemsPreviewParameterProvide
 import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
 import com.bagnolati.learnoflegends.core.ui.preview.manamunePreviewIndex
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
-import com.bagnolati.learnoflegends.core.ui.util.HtmlTags
 import com.bagnolati.learnoflegends.core.ui.util.asTextNumber
 import com.bagnolati.learnoflegends.core.ui.util.htmlToString
-import com.bagnolati.learnoflegends.core.ui.util.toHtmlAnnotatedString
+import com.bagnolati.learnoflegends.core.ui.util.lolHtmlToAnnotatedString
 import com.bagnolati.learnoflegends.feature.items.ItemsSort
 import com.bagnolati.learnoflegends.feature.items.getStatBySortItem
 import com.bagnolati.learnoflegends.core.ui.R as uiR
@@ -99,7 +94,7 @@ fun ItemDetailDialog(item: Item, onDismissRequest: () -> Unit) {
                 Spacer(modifier = Modifier.height(22.dp))
 
                 Text(
-                    text = item.description.toHtmlAnnotatedString(),
+                    text = item.description.lolHtmlToAnnotatedString(),
                     style = MaterialTheme.typography.bodyMedium
                 )
 
