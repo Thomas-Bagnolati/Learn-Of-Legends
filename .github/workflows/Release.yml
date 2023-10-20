@@ -32,9 +32,6 @@ jobs:
           gradlePath: app/build.gradle.kts
           versionCode: ${{github.run_number}}
 
-      - name: Grant execute permission to Gradle wrapper
-        run: chmod +x ./gradlew
-
       - name: Build app bundle
         id: buildReleaseBundle
         run: ./gradlew :app:bundleRelease
