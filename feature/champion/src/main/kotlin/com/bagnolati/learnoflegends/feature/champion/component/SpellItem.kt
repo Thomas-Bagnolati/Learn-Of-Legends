@@ -26,6 +26,7 @@ import com.bagnolati.learnoflegends.core.ui.preview.ChampionsPreviewParameterPro
 import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.core.ui.theme.spacing
+import com.bagnolati.learnoflegends.core.ui.util.fromHtmlToAnnotatedString
 
 
 @Composable
@@ -60,7 +61,7 @@ fun SpellItem(
                 )
                 Spacer(modifier = Modifier.width(spacing.medium))
                 Text(
-                    text = spell.name,
+                    text = spell.name.fromHtmlToAnnotatedString(),
                     style = typography.titleMedium
                 )
             }
@@ -70,7 +71,7 @@ fun SpellItem(
             Text(text = "CoolDown : ${spell.coolDownBurn}", style = typography.bodySmall)
             Spacer(modifier = Modifier.height(spacing.medium))
             Text(
-                text = spell.description,
+                text = spell.description.fromHtmlToAnnotatedString(),
                 style = typography.bodyMedium
             )
         }

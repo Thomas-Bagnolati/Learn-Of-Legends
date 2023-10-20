@@ -27,6 +27,7 @@ import com.bagnolati.learnoflegends.core.ui.preview.DevicesPreviews
 import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.core.ui.theme.spacing
+import com.bagnolati.learnoflegends.core.ui.util.fromHtmlToAnnotatedString
 import com.bagnolati.learnoflegends.feature.champion.component.PassiveItem
 import com.bagnolati.learnoflegends.feature.champion.component.SpellItem
 import com.bagnolati.learnoflegends.core.ui.R as uiR
@@ -146,12 +147,12 @@ private fun Presentation(
             .padding(vertical = MaterialTheme.spacing.medium),
     ) {
         Text(
-            text = champion.name,
+            text = champion.name.fromHtmlToAnnotatedString(),
             style = MaterialTheme.typography.headlineLarge,
             modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center
         )
         Text(
-            text = champion.title,
+            text = champion.title.fromHtmlToAnnotatedString(),
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.secondary,
             modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center
@@ -177,7 +178,7 @@ private fun ExpendableDescription(
     ) {
         if (!shouldExpand)
             Text(
-                text = textTrunked,
+                text = textTrunked.fromHtmlToAnnotatedString(),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -186,7 +187,7 @@ private fun ExpendableDescription(
             )
         else
             Text(
-                text = textComplete,
+                text = textComplete.fromHtmlToAnnotatedString(),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
