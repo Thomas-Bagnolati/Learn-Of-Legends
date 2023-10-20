@@ -68,3 +68,25 @@ internal val md_theme_dark_outlineVariant = Color(0xFF42474D)
 internal val md_theme_dark_scrim = Color(0xFF000000)
 
 internal val seed = Color(0xFF006496)
+
+/**
+ * LearnOfLegends highlight colors
+ */
+val colorBlue = Color(0xFF03A9F4)
+val colorGreen = Color(0xFF4CAF50)
+val colorPurple = Color(0xFFB388FF)
+val colorOrange = Color(0xFFFF9800)
+val colorGrey = Color(0xFFBDBDBD)
+val colorYellow = Color(0xFFFFC107)
+val colorLime = Color(0xFFCDDC39)
+val colorLightGreen = Color(0xFF8BC34A)
+val colorDeepOrange = Color(0xFFFF5722)
+val colorRed = Color(0xFFF44336)
+val colorLightRed = Color(0xFFF06292)
+val colorPink = Color(0xFFEA80FC)
+val colorBrawn = Color(0xFFBCAAA4)
+val colorCyan = Color(0xFF00ACC1)
+val colorLightBlue = Color(0xFF03A9F4)
+val colorIndigo = Color(0xFF9FA8DA)
+
+val colorBlueNight = Color(0xFF010A13)

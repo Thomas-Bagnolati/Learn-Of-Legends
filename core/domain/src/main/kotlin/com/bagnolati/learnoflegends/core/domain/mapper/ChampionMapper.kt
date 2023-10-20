@@ -1,4 +1,4 @@
-package com.bagnolati.nutrigood.core.domain.mapper
+package com.bagnolati.learnoflegends.core.domain.mapper
 
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.core.network.DdragonUrl

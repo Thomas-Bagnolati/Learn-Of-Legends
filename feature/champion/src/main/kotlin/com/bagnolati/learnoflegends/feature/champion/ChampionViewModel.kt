@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.bagnolati.learnoflegends.core.common.result.Result
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.feature.champion.navigation.ChampionArgs
-import com.bagnolati.nutrigood.core.domain.GetChampionUseCase
+import com.bagnolati.learnoflegends.core.domain.GetChampionUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

@@ -28,15 +28,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.bagnolati.learnoflegends.core.model.Item
 import com.bagnolati.learnoflegends.core.ui.component.DynamicAsyncImage
 import com.bagnolati.learnoflegends.core.ui.preview.ItemsPreviewParameterProvider
 import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
 import com.bagnolati.learnoflegends.core.ui.preview.manamunePreviewIndex
+import com.bagnolati.learnoflegends.core.ui.theme.DarkColorScheme
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
+import com.bagnolati.learnoflegends.core.ui.theme.colorYellow
 import com.bagnolati.learnoflegends.core.ui.util.asTextNumber
-import com.bagnolati.learnoflegends.core.ui.util.htmlToString
-import com.bagnolati.learnoflegends.core.ui.util.lolHtmlToAnnotatedString
+import com.bagnolati.learnoflegends.core.ui.util.fromHtmlToAnnotatedString
 import com.bagnolati.learnoflegends.feature.items.ItemsSort
 import com.bagnolati.learnoflegends.feature.items.getStatBySortItem
 import com.bagnolati.learnoflegends.core.ui.R as uiR
@@ -48,8 +50,13 @@ fun ItemDetailDialog(item: Item, onDismissRequest: () -> Unit) {
     AlertDialog(onDismissRequest = onDismissRequest) {
         Card(
             onClick = onDismissRequest,
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 2.dp
+            ),
+            // Force dark colors for better contrast on highlighted text.
             colors = CardDefaults.cardColors(
-                MaterialTheme.colorScheme.surface
+                containerColor = DarkColorScheme.surface,
+                contentColor = DarkColorScheme.onSurface
             ),
         ) {
             Column(
@@ -58,45 +65,56 @@ fun ItemDetailDialog(item: Item, onDismissRequest: () -> Unit) {
                     .verticalScroll(rememberScrollState())
             ) {
                 Header(item)
-                Spacer(modifier = Modifier.height(18.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 if (item.plaintext.isNotEmpty()) {
                     Text(
-                        text = item.plaintext.htmlToString(),
-                        style = MaterialTheme.typography.bodyMedium
+                        text = item.plaintext.fromHtmlToAnnotatedString(),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = DarkColorScheme.primary,
+                        lineHeight = 18.sp
                     )
-                    Spacer(modifier = Modifier.height(24.dp))
                 }
 
-                ItemsSort.values().forEach { sort ->
+                val statsToShow = ItemsSort.values().filter { sort ->
                     val stat = item.getStatBySortItem(sort)
                     val showStat = (stat > 0.0 && sort != ItemsSort.DEFAULT && sort != ItemsSort.GOLD)
-
-                    if (showStat) {
-                        Row(verticalAlignment = CenterVertically) {
-                            if (sort.icon != null)
-                                Image(
-                                    modifier = Modifier.size(24.dp),
-                                    painter = painterResource(id = sort.icon),
-                                    contentDescription = null
-                                )
-                            Spacer(modifier = Modifier.width(4.dp))
-                            Text(text = stringResource(id = sort.titleRes), style = MaterialTheme.typography.titleSmall)
-                            Spacer(modifier = Modifier.width(12.dp))
-                            Text(text = stat.asTextNumber())
-                        }
-                    }
-
+                    showStat
                 }
 
-                Spacer(modifier = Modifier.height(24.dp))
-                Divider()
-                Spacer(modifier = Modifier.height(22.dp))
+                if (statsToShow.isNotEmpty())
+                    Spacer(modifier = Modifier.height(12.dp))
 
-                Text(
-                    text = item.description.lolHtmlToAnnotatedString(),
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                statsToShow.forEach { sort ->
+                    val stat = item.getStatBySortItem(sort)
+                    Row(verticalAlignment = CenterVertically) {
+                        if (sort.icon != null)
+                            Image(
+                                modifier = Modifier.size(16.dp),
+                                painter = painterResource(id = sort.icon),
+                                contentDescription = null
+                            )
+                        Spacer(modifier = Modifier.width(6.dp))
+                        Text(text = stringResource(id = sort.titleRes), style = MaterialTheme.typography.titleSmall)
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = stat.asTextNumber(),
+                            style = MaterialTheme.typography.titleSmall
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(4.dp))
+                }
+
+                val descriptionHighlighted = item.description.fromHtmlToAnnotatedString()
+                if (descriptionHighlighted.isNotEmpty()) {
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Divider()
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = descriptionHighlighted,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
 
             }
         }
@@ -117,7 +135,7 @@ private fun Header(item: Item) {
 
         Column {
             Text(
-                text = item.name.htmlToString(),
+                text = item.name.fromHtmlToAnnotatedString(),
                 style = MaterialTheme.typography.titleLarge,
             )
 
@@ -125,7 +143,7 @@ private fun Header(item: Item) {
                 Text(
                     text = "${item.gold.total} (${item.gold.sell})",
                     style = MaterialTheme.typography.titleSmall,
-                    color = MaterialTheme.colorScheme.tertiary
+                    color = colorYellow
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Image(

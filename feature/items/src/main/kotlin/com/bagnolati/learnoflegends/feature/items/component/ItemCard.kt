@@ -44,7 +44,7 @@ fun ItemCard(
 ) {
     Card(
         modifier = modifier,
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         shape = RoundedCornerShape(6.dp),
         onClick = { onClick(item) },
     ) {
@@ -54,7 +54,8 @@ fun ItemCard(
             ) {
 
                 AsyncImage(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize(),
                     model = item.image.full,
                     contentDescription = null,
                     placeholder = painterResource(id = uiR.drawable.ic_default_placeholder),
@@ -67,7 +68,6 @@ fun ItemCard(
                         painter = painterResource(id = R.drawable.item_ornn_border),
                         contentDescription = null
                     )
-
             }
             if (showValue)
                 Text(

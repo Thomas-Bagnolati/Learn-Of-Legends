@@ -62,7 +62,7 @@ private fun SortInfoRow(
     LolTheme {
         Surface {
             SortInfoRow(
-                sort = ItemsSort.FLAT_HP_POOL
+                sort = ItemsSort.HEALTH
             )
         }
     }

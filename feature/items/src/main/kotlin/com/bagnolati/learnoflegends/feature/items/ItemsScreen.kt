@@ -66,7 +66,7 @@ import com.bagnolati.learnoflegends.feature.items.component.ItemCard
 import com.bagnolati.learnoflegends.feature.items.component.ItemDetailDialog
 import com.bagnolati.learnoflegends.feature.items.component.SortInfoRow
 import com.bagnolati.learnoflegends.feature.items.component.SortItemRow
-import com.bagnolati.nutrigood.core.domain.mapper.capitalize
+import com.bagnolati.learnoflegends.core.domain.mapper.capitalize
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -397,7 +397,7 @@ private fun ItemScreenPreview(
                 itemsUiState = ItemsUiState.Success(
                     items = items,
                     searchQuery = "",
-                    sort = ItemsSort.FLAT_ARMOR,
+                    sort = ItemsSort.ARMOR,
                     selectedItem = items.first()
                 ),
                 onSearchQueryChange = {},

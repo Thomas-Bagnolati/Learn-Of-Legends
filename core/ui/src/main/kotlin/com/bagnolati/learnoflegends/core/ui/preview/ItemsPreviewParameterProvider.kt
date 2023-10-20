@@ -38,7 +38,7 @@ private object PreviewParameterItems {
             colloq = "",
             gold = Item.Gold(base = 900, purchasable = true, sell = 2170, total = 3100),
             stats = Item.Stats(
-                flatPhysicalDamageMod = 60.0,
+                physicalDamage = 60.0,
             ),
             from = listOf("3134", "3133"),
             into = listOf("7002"),
@@ -65,8 +65,8 @@ private object PreviewParameterItems {
             arena = false
         ),
         stats = Item.Stats(
-            flatPhysicalDamageMod = 35.0,
-            flatMPPoolMod = 500.0
+            physicalDamage = 35.0,
+            mana = 500.0
         ),
         depth = 3,
         category = Item.Category.LEGENDARY,
