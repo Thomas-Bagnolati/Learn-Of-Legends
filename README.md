@@ -1,6 +1,6 @@
 <img src="docs/logo.png" alt="drawing" width="100"/>
 
-Learn Of Legends App 
+Learn Of Legends App
 ====================
 
 In order to share my knowledge and learn about the bests practices I build this application.
@@ -15,6 +15,7 @@ Inside `build-logic` is a `convention` module, which defines a set of plugins th
 modules can use to configure themselves.
 
 The `core` module contains:
+
 - `common`.
 - `data`.
 - `datastore`.
@@ -24,6 +25,7 @@ The `core` module contains:
 - `ui`.
 
 The `feature` module contains:
+
 - `champion`.
 - `champions`.
 - `items`.
@@ -32,18 +34,20 @@ The `feature` module contains:
 It use **MVVM** design Pattern on **Multi-Module** project.
 
 # Screenshots
-![Screenshots of LearnOfLegends](docs/screenshots.png "Screenshot showing UI on mobile and tablet")
 
+![Screenshots of LearnOfLegends](docs/screenshots.png "Screenshot showing UI on mobile and tablet")
 
 # Tech
 
 ### Language
+
 - Kotlin.
 - Gradle (Kotlin DSL).
 - Yaml (for GitHub Action Workflow).
 - Proto (for model datastore).
 
 ### Common
+
 - Coroutines.
 - Kotlin Flow.
 - Proguards.
@@ -51,6 +55,7 @@ It use **MVVM** design Pattern on **Multi-Module** project.
 - Gradle Version Catalog.
 
 ### UI
+
 - Jetpack Compose.
 - Coil.
 - Material 3 (dynamic theme).
@@ -61,17 +66,21 @@ It use **MVVM** design Pattern on **Multi-Module** project.
 - Navigation.
 
 ### Network
+
 - Retrofit.
 - Kotlin Serialization.
 
 ### Storage
+
 - DataStore.
 
 ### Dependencies Injection
+
 - Hilt
 - Hilt Navigation Compose.
 
 ### CI/CD
+
 - GitHub Action workflow (build, push on repo, deploy on GooglePlayStore)
 
 # License

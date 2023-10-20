@@ -3,10 +3,10 @@ package com.bagnolati.learnoflegends.feature.champions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bagnolati.learnoflegends.core.common.result.Result
+import com.bagnolati.learnoflegends.core.domain.GetChampionsUseCase
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.feature.champions.component.ChampionOrder
-import com.bagnolati.learnoflegends.feature.champions.component.getStatByOrderAsDouble
-import com.bagnolati.nutrigood.core.domain.GetChampionsUseCase
+import com.bagnolati.learnoflegends.feature.champions.component.getStatByOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -84,7 +84,7 @@ class ChampionsViewModel @Inject constructor(
                 is Result.Success -> {
 
                     val championsFiltered = result.data
-                        .orderChampions(selectedOrder)
+                        .sortedBy { it.getStatByOrder(selectedOrder) }
                         .filter {
                             it.name.lowercase().trim()
                                 .contains(searchQuery.lowercase().trim())
@@ -96,8 +96,8 @@ class ChampionsViewModel @Inject constructor(
                             else index
                         }
 
-                    val allStatsByOrder = result.data.map {
-                        it.getStatByOrderAsDouble(selectedOrder)
+                    val statsByOrder = result.data.map {
+                        it.getStatByOrder(selectedOrder)
                     }
 
                     ChampionsUiState.Success(
@@ -105,8 +105,8 @@ class ChampionsViewModel @Inject constructor(
                         selectedChampionOrder = selectedOrder,
                         selectedChampion = selectedChampion,
                         indexOfSelectedChampion = indexOfSelectedChampion,
-                        minStatValue = allStatsByOrder.min(),
-                        maxStatValue = allStatsByOrder.max(),
+                        minStatOfOrder = statsByOrder.min(),
+                        maxStatOfOrder = statsByOrder.max(),
                         searchQuery = searchQuery
                     )
                 }
@@ -117,52 +117,6 @@ class ChampionsViewModel @Inject constructor(
         }
     }
 
-    /**
-     * Order a list of [Champion] by [ChampionOrder].
-     *
-     * @return new List of [Champion] ordered.
-     */
-    private fun List<Champion>.orderChampions(order: ChampionOrder): List<Champion> {
-        return this
-            // By String
-            .sortedBy {
-                if (order == ChampionOrder.ALPHABETIC) it.name
-                else null
-            }
-            // By Int
-            .sortedByDescending {
-                when (order) {
-                    ChampionOrder.HP -> it.stats.hp
-                    ChampionOrder.HP_LVL -> it.stats.hpPerLevel
-                    ChampionOrder.MOVE_SPEED -> it.stats.moveSpeed
-                    ChampionOrder.ARMOR -> it.stats.armor
-                    ChampionOrder.MAGIC_RESIST -> it.stats.spellBlock
-                    ChampionOrder.ATTACK_RANGE -> it.stats.attackRange
-                    ChampionOrder.CRIT -> it.stats.crit
-                    ChampionOrder.CRIT_LVL -> it.stats.critPerLevel
-                    ChampionOrder.ATTACK_DAMAGE -> it.stats.attackDamage
-                    else -> null
-                }
-            }
-            // By Double
-            .sortedByDescending {
-                when (order) {
-                    ChampionOrder.MP -> it.stats.mp
-                    ChampionOrder.MP_LVL -> it.stats.mpPerLevel
-                    ChampionOrder.ARMOR_LVL -> it.stats.armorPerLevel
-                    ChampionOrder.MAGIC_RESIST_LVL -> it.stats.spellBlockPerLevel
-                    ChampionOrder.HP_REGEN -> it.stats.hpRegen
-                    ChampionOrder.HP_REGEN_LVL -> it.stats.hpRegenPerLevel
-                    ChampionOrder.MP_REGEN -> it.stats.mpRegen
-                    ChampionOrder.MP_REGEN_LVL -> it.stats.mpRegenPerLevel
-                    ChampionOrder.ATTACK_DAMAGE_LVL -> it.stats.attackDamagePerLevel
-                    ChampionOrder.ATTACK_SPEED -> it.stats.attackSpeed
-                    ChampionOrder.ATTACK_SPEED_LVL -> it.stats.attackSpeedPerLevel
-                    else -> null
-                }
-            }
-    }
-
 }
 
 
@@ -171,8 +125,8 @@ interface ChampionsUiState {
     data class Success(
         val champions: List<Champion>,
         val selectedChampionOrder: ChampionOrder,
-        val minStatValue: Double,
-        val maxStatValue: Double,
+        val minStatOfOrder: Double,
+        val maxStatOfOrder: Double,
         val selectedChampion: Champion?,
         val indexOfSelectedChampion: Int?,
         val searchQuery: String,

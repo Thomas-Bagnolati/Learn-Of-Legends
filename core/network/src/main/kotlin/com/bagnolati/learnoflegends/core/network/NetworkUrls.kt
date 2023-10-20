@@ -7,8 +7,9 @@ package com.bagnolati.learnoflegends.core.network
  * See [documentation](https://developer.riotgames.com/docs/lol)
  */
 object DdragonUrl {
-    private const val VERSION = "13.18.1"
-//    private const val BASE_URL = BuildConfig.DDRAGON_BASE_URL
+    private const val VERSION = "13.20.1"
+
+    //    private const val BASE_URL = BuildConfig.DDRAGON_BASE_URL
     private const val BASE_URL = "https://ddragon.leagueoflegends.com/"
     const val BASE_URL_WITH_VERSION = "${BASE_URL}cdn/$VERSION/"
 
@@ -19,10 +20,10 @@ object DdragonUrl {
     const val SPLASH_IMAGE_URL = "${BASE_URL}cdn/img/champion/splash/"
     const val LOADING_IMAGE_URL = "${BASE_URL}img/champion/loading/"
     const val SPELL_IMAGE_URL = "${BASE_URL_WITH_VERSION}img/spell/"
+    const val ITEM_IMAGE_URL = "${BASE_URL_WITH_VERSION}img/item/"
 }
 
 object LeagueOfLegendsUrl {
     private const val BASE_URL = "https://universe.leagueoflegends.com/"
-//    private const val BASE_URL = BuildConfig.LOL_BASE_URL
     const val ROLE_IMG = "${BASE_URL}images/"
 }

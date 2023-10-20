@@ -1,6 +1,5 @@
-package com.bagnolati.nutrigood.core.domain.mapper
+package com.bagnolati.learnoflegends.core.domain.mapper
 
-import android.text.Html
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.core.network.DdragonUrl
 import com.bagnolati.learnoflegends.core.network.LeagueOfLegendsUrl
@@ -9,9 +8,17 @@ import java.util.Locale
 
 
 /**
+ * Map list Of [NetworkChampion] to list of [Champion]
+ */
+fun List<NetworkChampion>.asChampions(): List<Champion> =
+    mapIndexed { index, networkChampion ->
+        networkChampion.asChampion(index)
+    }
+
+/**
  * Map [NetworkChampion] to [Champion]
  */
-fun NetworkChampion.asChampion(): Champion {
+fun NetworkChampion.asChampion(index: Int? = null): Champion {
     return Champion(
         id = id,
         name = name,
@@ -22,7 +29,7 @@ fun NetworkChampion.asChampion(): Champion {
         enemyTips = enemytips,
         tags = tags.map { it.asTag() },
         imageUrl = image.asImage(),
-        stats = stats.asStats(),
+        stats = stats.asStats(index ?: 0),
         passive = passive?.asPassive(),
         spells = spells.map { it.asSpell() },
         skins = skins.map { it.asSkin(full = image.full) }
@@ -48,7 +55,7 @@ fun NetworkChampion.NetworkSpell.asSpell(): Champion.Spell {
     return Champion.Spell(
         id = id,
         name = name,
-        description = description.htmlToString(),
+        description = description,
         tooltip = tooltip,
         levelTip = Champion.Spell.LevelTip(label = leveltip?.label, effect = leveltip?.effect),
         maxRank = maxrank,
@@ -73,33 +80,37 @@ fun NetworkChampion.NetworkSpell.asSpell(): Champion.Spell {
 fun NetworkChampion.NetworkPassive.asPassive(): Champion.Passive {
     return Champion.Passive(
         name = name,
-        description = description.htmlToString(),
+        description = description,
         imageUrl = image.asImage()
     )
 }
 
 /**
  * Map [NetworkChampion.NetworkStats] to [Champion.Stats]
+ *
+ * All stats as Double to easily can play with it.
+ * @param index to retrieve alphabetic position.
  */
-fun NetworkChampion.NetworkStats.asStats(): Champion.Stats {
+fun NetworkChampion.NetworkStats.asStats(index: Int): Champion.Stats {
     return Champion.Stats(
-        hp = hp,
-        hpPerLevel = hpperlevel,
+        alphabetic = (index + 1).toDouble(),
+        hp = hp.toDouble(),
+        hpPerLevel = hpperlevel.toDouble(),
         mp = mp,
         mpPerLevel = mpperlevel,
-        moveSpeed = movespeed,
-        armor = armor,
+        moveSpeed = movespeed.toDouble(),
+        armor = armor.toDouble(),
         armorPerLevel = armorperlevel,
-        spellBlock = spellblock,
+        spellBlock = spellblock.toDouble(),
         spellBlockPerLevel = spellblockperlevel,
-        attackRange = attackrange,
+        attackRange = attackrange.toDouble(),
         hpRegen = hpregen,
         hpRegenPerLevel = hpregenperlevel,
         mpRegen = mpregen,
         mpRegenPerLevel = mpregenperlevel,
-        crit = crit,
-        critPerLevel = critperlevel,
-        attackDamage = attackdamage,
+        crit = crit.toDouble(),
+        critPerLevel = critperlevel.toDouble(),
+        attackDamage = attackdamage.toDouble(),
         attackDamagePerLevel = attackdamageperlevel,
         attackSpeedPerLevel = attackspeedperlevel,
         attackSpeed = attackspeed,
@@ -142,12 +153,6 @@ fun NetworkChampion.NetworkSkin.asSkin(full: String): Champion.Skin {
 
 
 /**
- * Decode HTML String to Text
- */
-fun String.htmlToString(): String =
-    Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY).toString()
-
-/**
  * Safely capitalize String.
  */
-fun String.capitalize() = this.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+fun String.capitalize() = this.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }

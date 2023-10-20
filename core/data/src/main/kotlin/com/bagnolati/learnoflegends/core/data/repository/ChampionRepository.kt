@@ -1,9 +1,7 @@
 package com.bagnolati.learnoflegends.core.data.repository
 
 import com.bagnolati.learnoflegends.core.common.result.Result
-import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.core.network.model.NetworkChampion
-import kotlinx.coroutines.flow.Flow
 
 interface ChampionRepository {
     /**

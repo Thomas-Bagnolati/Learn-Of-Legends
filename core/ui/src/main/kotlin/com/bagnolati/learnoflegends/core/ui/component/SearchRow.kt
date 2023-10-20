@@ -1,4 +1,4 @@
-package com.bagnolati.learnoflegends.feature.champions.component
+package com.bagnolati.learnoflegends.core.ui.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -24,14 +24,21 @@ import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.core.ui.theme.spacing
 
+/**
+ * Is a Search View, it's a combination between [FloatingActionButton]
+ * and [OutlinedTextField]
+ *
+ * @param opened The state of the [SearchRowSection]
+ * @param onClick The click on the [FloatingActionButton]
+ */
 @Composable
-internal fun SearchRowSection(
+fun SearchRowSection(
     modifier: Modifier = Modifier,
     opened: Boolean,
-    onClickSearchFab: () -> Unit,
-    onSubmitKeyboard: () -> Unit,
     searchQuery: String,
-    onSearchQueryChange: (String) -> Unit
+    onSearchQueryChange: (String) -> Unit,
+    onClick: () -> Unit,
+    onSubmitKeyboard: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -42,7 +49,6 @@ internal fun SearchRowSection(
         if (opened) {
             // Focus text input when displayed
             LaunchedEffect(Unit) { focusRequester.requestFocus() }
-
             OutlinedTextField(
                 modifier = Modifier
                     .weight(1f)
@@ -66,9 +72,9 @@ internal fun SearchRowSection(
                 bottom = MaterialTheme.spacing.floatingActionButton,
                 end = MaterialTheme.spacing.floatingActionButton
             ),
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
-            onClick = onClickSearchFab,
+            contentColor = MaterialTheme.colorScheme.primaryContainer,
+            containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            onClick = onClick,
         ) {
             Icon(
                 imageVector = if (opened) LolIcons.Close else LolIcons.Search,
@@ -85,8 +91,8 @@ private fun SearchRowPreview() {
     LolTheme {
         SearchRowSection(
             opened = true,
-            searchQuery = "champion query",
-            onClickSearchFab = {},
+            searchQuery = "Search query",
+            onClick = {},
             onSearchQueryChange = {},
             onSubmitKeyboard = {}
         )

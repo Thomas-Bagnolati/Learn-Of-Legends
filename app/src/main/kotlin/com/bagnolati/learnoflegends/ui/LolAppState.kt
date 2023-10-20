@@ -79,7 +79,7 @@ class LolAppState(
         .map(Boolean::not)
         .stateIn(
             scope = coroutineScope,
-            started = SharingStarted.WhileSubscribed(5_000),
+            started = SharingStarted.Eagerly,
             initialValue = false,
         )
 

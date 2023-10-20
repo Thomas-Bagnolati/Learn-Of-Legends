@@ -6,7 +6,7 @@
     <string name="select_champ">Click to select a champion</string>
 
     <!-- Floating Action Buttons -->
-    <string name="order_floating_action_button">Order</string>
+    <string name="order_floating_action_button">Sort</string>
     <string name="order_floating_action_button_close">Close</string>
     <string name="order_floating_action_button_description">Open Fab Order Menu</string>
     <string name="close_fab_menu_description">Close Fab Menu</string>

@@ -20,12 +20,12 @@ object NetworkChampionsSerializer : KSerializer<List<NetworkChampion>> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("data", kind = PrimitiveKind.STRING)
 
     override fun deserialize(decoder: Decoder): List<NetworkChampion> {
-        val jsonInput = decoder as? JsonDecoder ?: error("Can be deserialized only by JSON")
-        val fieldsAsJson = jsonInput.decodeJsonElement().jsonObject
-        val jsonParser = jsonInput.json
+        val jsonDecoder = decoder as? JsonDecoder ?: error("Can be deserialized only by JSON")
+        val json = jsonDecoder.json
+        val jsonObject = jsonDecoder.decodeJsonElement().jsonObject
 
-        return fieldsAsJson.map {
-            jsonParser.decodeFromJsonElement(it.value)
+        return jsonObject.map {
+            json.decodeFromJsonElement(it.value)
         }
     }
 
