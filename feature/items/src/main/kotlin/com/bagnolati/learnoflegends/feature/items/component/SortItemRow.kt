@@ -2,18 +2,25 @@ package com.bagnolati.learnoflegends.feature.items.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.bagnolati.learnoflegends.core.ui.icon.LolIcons
+import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
+import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.feature.items.ItemsSort
 
 @Composable
@@ -22,6 +29,10 @@ fun SortItemRow(
     sort: ItemsSort,
     onClick: () -> Unit
 ) {
+    val colorFilterIcon =
+        if (sort.iconVisibleOnDark.not()) ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
+        else null
+
     ListItem(
         modifier = Modifier.clickable { onClick() },
         headlineContent = {
@@ -36,7 +47,10 @@ fun SortItemRow(
                 Image(
                     modifier = Modifier.size(24.dp),
                     painter = painterResource(id = sort.icon),
-                    contentDescription = null
+                    alignment = Alignment.Center,
+                    contentScale = ContentScale.Crop,
+                    contentDescription = null,
+                    colorFilter = colorFilterIcon
                 )
             else
                 Icon(
@@ -53,3 +67,16 @@ fun SortItemRow(
     )
 }
 
+@ThemePreviews
+@Composable
+private fun SortItemRowPreview() {
+    LolTheme {
+        Surface {
+            SortItemRow(
+                sort = ItemsSort.PERCENT_OMNIVAMP,
+                onClick = {}
+            )
+        }
+    }
+
+}

@@ -1,7 +1,9 @@
 package com.bagnolati.learnoflegends.core.network.di
 
 import android.content.Context
+import android.graphics.Bitmap
 import coil.ImageLoader
+import coil.decode.BitmapFactoryDecoder
 import coil.decode.SvgDecoder
 import coil.util.DebugLogger
 import com.bagnolati.learnoflegends.core.network.BuildConfig
@@ -12,6 +14,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.serialization.json.Json
 import okhttp3.Call
 import okhttp3.OkHttpClient

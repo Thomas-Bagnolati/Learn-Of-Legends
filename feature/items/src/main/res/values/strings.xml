@@ -5,15 +5,39 @@
     <string name="sort_default">Default</string>
 
     <string name="sort_gold">Price</string>
-    <string name="sort_hp">Health</string>
-    <string name="sort_mp">Mana</string>
+    <string name="sort_health">Health</string>
+    <string name="sort_mana">Mana</string>
+
     <string name="sort_armor">Armor</string>
-    <string name="sort_magic_resist">Magic resistance</string>
-    <string name="sort_move_speed">Move speed</string>
-    <string name="sort_move_speed_percent">Move speed %</string>
-    <string name="sort_ad">Attack damage</string>
-    <string name="sort_ap">Ability power</string>
-    <string name="sort_crit_chance">Critical chance %</string>
-    <string name="sort_attack_speed">Attack speed %</string>
-    <string name="sort_lifesteal">Life steal %</string>
+    <string name="sort_magic_resist">Magic Resistance</string>
+
+    <string name="sort_move_speed">Move Speed</string>
+    <string name="sort_percent_move_speed">Move Speed %</string>
+
+    <string name="sort_physical_damage">Attack Damage</string>
+    <string name="sort_percent_physical_damage">Physical Damage %</string>
+    <string name="sort_percent_armor_penetration">Armor Penetration %</string>
+
+    <string name="sort_ability_power">Ability Power</string>
+    <string name="sort_percent_ability_power">Ability Power %</string>
+    <string name="sort_percent_magic_penetration">Magic Penetration %</string>
+
+    <string name="sort_percent_crit_chance">Critical Chance %</string>
+    <string name="sort_percent_crit_damage">Critical Damage %</string>
+    <string name="sort_attack_speed">Attack Speed %</string>
+
+    <string name="sort_lifesteal">Life Steal %</string>
+    <string name="sort_percent_base_health_regen">Base Health Regen %</string>
+    <string name="sort_percent_base_mana_regen">Base Mana Regen %</string>
+
+    <string name="sort_percent_omnivamp">Omnivamp %</string>
+    <string name="sort_lethality">Lethality %</string>
+
+    <string name="sort_ability_haste">Ability Haste</string>
+    <string name="sort_percent_tenacity">Tenacity %</string>
+
+    <string name="sort_gold_per_10_seconds">Gold per 10 seconds</string>
+    <string name="sort_percent_heal_and_shield_power">Heal and Shield Power</string>
+
+
 </resources>

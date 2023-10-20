@@ -1,5 +1,6 @@
-package com.bagnolati.nutrigood.core.domain.mapper
+package com.bagnolati.learnoflegends.core.domain.mapper
 
+import com.bagnolati.learnoflegends.core.model.HtmlTag
 import com.bagnolati.learnoflegends.core.model.Item
 import com.bagnolati.learnoflegends.core.model.Item.Category.BASIC
 import com.bagnolati.learnoflegends.core.model.Item.Category.BOOT
@@ -16,6 +17,8 @@ import com.bagnolati.learnoflegends.core.model.Item.Category.REMOVED
 import com.bagnolati.learnoflegends.core.model.Item.Category.STARTER
 import com.bagnolati.learnoflegends.core.model.Item.Category.TRINKET
 import com.bagnolati.learnoflegends.core.model.Item.Category.UNKNOWN
+import com.bagnolati.learnoflegends.core.model.closeTag
+import com.bagnolati.learnoflegends.core.model.openTag
 import com.bagnolati.learnoflegends.core.network.DdragonUrl
 import com.bagnolati.learnoflegends.core.network.model.NetworkItem
 
@@ -32,7 +35,7 @@ fun NetworkItem.asItem(): Item = Item(
     tags = tags,
     gold = gold.asGold(),
     colloq = colloq,
-    stats = stats.asStats(),
+    stats = stats.asStats(description),
     from = from,
     into = into,
     category = getCategory(),
@@ -40,6 +43,10 @@ fun NetworkItem.asItem(): Item = Item(
     maps = maps.asMaps(),
 )
 
+/**
+ * Retrieve a [Item.Category] for each [Item].
+ * As the
+ */
 fun NetworkItem.getCategory(): Item.Category {
     return when (id) {
         3070 -> STARTER // Tear of the Goddess
@@ -102,6 +109,7 @@ fun NetworkItem.getCategory(): Item.Category {
         3599 -> UNKNOWN // Black Spear
         7050 -> UNKNOWN // GP placeholder
 
+        // Try to keep it more generic but keep in mind it can make mistakes.
         else ->
             if (tags.isEmpty()) DISTRIBUTED
             else if (tags.contains("Boots")) BOOT
@@ -149,76 +157,104 @@ fun NetworkItem.NetworkGold.asGold(): Item.Gold = Item.Gold(
 
 /**
  * Map [NetworkItem.NetworkStats] to [Item.Stats]
+ *
+ * [NetworkItem.NetworkStats] is not relevant to get all stats, lot of stats are missing.
+ * So we will extract them from the description text.
  */
-fun NetworkItem.NetworkStats.asStats(): Item.Stats = Item.Stats(
-    flatArmorMod = flatArmorMod,
-    flatAttackSpeedMod = flatAttackSpeedMod,
-    flatBlockMod = flatBlockMod,
-    flatCritChanceMod = flatCritChanceMod,
-    flatCritDamageMod = flatCritDamageMod,
-    flatEXPBonus = flatEXPBonus,
-    flatEnergyPoolMod = flatEnergyPoolMod,
-    flatEnergyRegenMod = flatEnergyRegenMod,
-    flatHPPoolMod = flatHPPoolMod,
-    flatHPRegenMod = flatHPRegenMod,
-    flatMPPoolMod = flatMPPoolMod,
-    flatMPRegenMod = flatMPRegenMod,
-    flatMagicDamageMod = flatMagicDamageMod,
-    flatMovementSpeedMod = flatMovementSpeedMod,
-    flatPhysicalDamageMod = flatPhysicalDamageMod,
-    flatSpellBlockMod = flatSpellBlockMod,
-    percentArmorMod = percentArmorMod?.asPercent(),
-    percentAttackSpeedMod = percentAttackSpeedMod?.asPercent(),
-    percentBlockMod = percentBlockMod?.asPercent(),
-    percentCritChanceMod = percentCritChanceMod?.asPercent(),
-    percentCritDamageMod = percentCritDamageMod?.asPercent(),
-    percentDodgeMod = percentDodgeMod?.asPercent(),
-    percentEXPBonus = percentEXPBonus?.asPercent(),
-    percentHPPoolMod = percentHPPoolMod?.asPercent(),
-    percentHPRegenMod = percentHPRegenMod?.asPercent(),
-    percentLifeStealMod = percentLifeStealMod?.asPercent(),
-    percentMPPoolMod = percentMPPoolMod?.asPercent(),
-    percentMPRegenMod = percentMPRegenMod?.asPercent(),
-    percentMagicDamageMod = percentMagicDamageMod?.asPercent(),
-    percentMovementSpeedMod = percentMovementSpeedMod?.asPercent(),
-    percentPhysicalDamageMod = percentPhysicalDamageMod?.asPercent(),
-    percentSpellBlockMod = percentSpellBlockMod?.asPercent(),
-    percentSpellVampMod = percentSpellVampMod?.asPercent(),
-    rFlatArmorModPerLevel = rFlatArmorModPerLevel,
-    rFlatArmorPenetrationMod = rFlatArmorPenetrationMod,
-    rFlatArmorPenetrationModPerLevel = rFlatArmorPenetrationModPerLevel,
-    rFlatCritChanceModPerLevel = rFlatCritChanceModPerLevel,
-    rFlatCritDamageModPerLevel = rFlatCritDamageModPerLevel,
-    rFlatDodgeMod = rFlatDodgeMod,
-    rFlatDodgeModPerLevel = rFlatDodgeModPerLevel,
-    rFlatEnergyModPerLevel = rFlatEnergyModPerLevel,
-    rFlatEnergyRegenModPerLevel = rFlatEnergyRegenModPerLevel,
-    rFlatGoldPer10Mod = rFlatGoldPer10Mod,
-    rFlatHPModPerLevel = rFlatHPModPerLevel,
-    rFlatHPRegenModPerLevel = rFlatHPRegenModPerLevel,
-    rFlatMPModPerLevel = rFlatMPModPerLevel,
-    rFlatMPRegenModPerLevel = rFlatMPRegenModPerLevel,
-    rFlatMagicDamageModPerLevel = rFlatMagicDamageModPerLevel,
-    rFlatMagicPenetrationMod = rFlatMagicPenetrationMod,
-    rFlatMagicPenetrationModPerLevel = rFlatMagicPenetrationModPerLevel,
-    rFlatMovementSpeedModPerLevel = rFlatMovementSpeedModPerLevel,
-    rFlatPhysicalDamageModPerLevel = rFlatPhysicalDamageModPerLevel,
-    rFlatSpellBlockModPerLevel = rFlatSpellBlockModPerLevel,
-    rFlatTimeDeadMod = rFlatTimeDeadMod,
-    rFlatTimeDeadModPerLevel = rFlatTimeDeadModPerLevel,
-    rPercentArmorPenetrationMod = rPercentArmorPenetrationMod?.asPercent(),
-    rPercentArmorPenetrationModPerLevel = rPercentArmorPenetrationModPerLevel?.asPercent(),
-    rPercentAttackSpeedModPerLevel = rPercentAttackSpeedModPerLevel?.asPercent(),
-    rPercentCooldownMod = rPercentCooldownMod?.asPercent(),
-    rPercentCooldownModPerLevel = rPercentCooldownModPerLevel?.asPercent(),
-    rPercentMagicPenetrationMod = rPercentMagicPenetrationMod?.asPercent(),
-    rPercentMagicPenetrationModPerLevel = rPercentMagicPenetrationModPerLevel?.asPercent(),
-    rPercentMovementSpeedModPerLevel = rPercentMovementSpeedModPerLevel?.asPercent(),
-    rPercentTimeDeadMod = rPercentTimeDeadMod?.asPercent(),
-    rPercentTimeDeadModPerLevel = rPercentTimeDeadModPerLevel?.asPercent()
-)
+fun NetworkItem.NetworkStats.asStats(description: String): Item.Stats {
+    var text = description
 
+    // retrieves stat from description string
+    // 1 -> get stats text
+    text.getTagAndContentOrNull(HtmlTag.STATS)?.let {
+        text = it
+        // 2 -> remove tags
+        text = text.removeTags(HtmlTag.STATS)
+        text = text.removeTags(HtmlTag.ATTENTION)
+        text = text.removeTags(HtmlTag.ORNN_BONUS)
+        text = text.removeOpenTag(HtmlTag.BR)
+        text = text.removeTags(HtmlTag.BOLD)
+        text = text.removeTags(HtmlTag.BUFFED_STAT)
+        text = text.removeTags(HtmlTag.NERFED_STAT)
+        text = text.trim()
+    }
+
+    return Item.Stats(
+        abilityHaste = text.extractStatValueOrNull("Ability Haste"),
+        abilityPower = text.extractStatValueOrNull("Ability Power"),
+        armor = text.extractStatValueOrNull("Armor"),
+        goldPer10Seconds = text.extractStatValueOrNull("Gold Per"),
+        health = text.extractStatValueOrNull("Health"),
+        healthRegen = text.extractStatValueOrNull("Base Health Regen"),
+        lethality = text.extractStatValueOrNull("Lethality"),
+        magicResist = text.extractStatValueOrNull("Magic Resist"),
+        mana = text.extractStatValueOrNull("Mana"),
+        manaRegen = text.extractStatValueOrNull("Base Mana Regen"),
+        moveSpeed = text.extractStatValueOrNull("Move Speed") ?: flatMovementSpeedMod, // no <stats> tag on mobility boots.
+        percentMoveSpeed = text.extractStatValueOrNull("Move Speed", true),
+        physicalDamage = text.extractStatValueOrNull("Attack Damage"),
+        percentArmorPenetration = text.extractStatValueOrNull("Armor Penetration", true),
+        percentAttackSpeed = text.extractStatValueOrNull("Attack Speed", true),
+        percentCritChance = text.extractStatValueOrNull("Critical Strike Chance", true),
+        percentCritDamage = text.extractStatValueOrNull("Critical Strike Damage", true),
+        percentHealAndShieldPower = text.extractStatValueOrNull("Heal and Shield Power", true),
+        percentLifeSteal = text.extractStatValueOrNull("Life Steal", true),
+        percentMagicPenetration = text.extractStatValueOrNull("Magic Penetration", true),
+        percentManaRegen = text.extractStatValueOrNull("Base Mana Regen", true),
+        percentOmnivamp = text.extractStatValueOrNull("Omnivamp", true),
+        percentTenacity = text.extractStatValueOrNull("Tenacity", true),
+        percentHealthRegen = text.extractStatValueOrNull("Base Health Regen", true),
+    )
+}
+
+/**
+ * Percent are represented as /1 instead of /100
+ *
+ * @return For 0.2 gives 20.0
+ */
 fun Double?.asPercent(): Double? {
     if (this == null) return null
     return (this * 100).toInt().toDouble()
+}
+
+fun String.removeTags(tag: HtmlTag): String =
+    this.replace(tag.openTag(), "")
+        .replace(tag.closeTag(), "")
+
+fun String.removeOpenTag(tag: HtmlTag): String =
+    replace(tag.openTag(), "")
+
+fun String.getTagAndContentOrNull(tag: HtmlTag): String? {
+    val start = indexOf(tag.openTag(), 0)
+    val end = indexOf(tag.closeTag(), start) + tag.closeTag().count()
+    return if (start >= 0 && start < end) substring(start, end)
+    else null
+}
+
+fun Char.isCorrectAsValue(): Boolean =
+    this == ' ' || this == '%' || this.digitToIntOrNull() != null
+
+fun String.extractStatValueOrNull(stat: String, asPercent: Boolean = false): Double? {
+    var stringValue = ""
+    var lastIndex = indexOf(stat)
+
+    if (lastIndex <= 0) return null
+    if (stat.isEmpty()) return null
+    if (!contains((stat))) return null
+
+    do {
+        val char = get(lastIndex - 1)
+        lastIndex -= 1
+        if (char.isCorrectAsValue()) stringValue = char + stringValue
+    } while (lastIndex > 0 && char.isCorrectAsValue())
+
+    stringValue = stringValue.trim()
+    if (stringValue.isEmpty()) return null
+    if (stringValue.contains('%') && !asPercent) return null
+    if (!stringValue.contains('%') && asPercent) return null
+
+    // If is by percent remove '%' then convert to Double
+    return if (stringValue.contains('%'))
+        stringValue.replace("%", "").trim().toDoubleOrNull()
+    else stringValue.toDoubleOrNull()
 }

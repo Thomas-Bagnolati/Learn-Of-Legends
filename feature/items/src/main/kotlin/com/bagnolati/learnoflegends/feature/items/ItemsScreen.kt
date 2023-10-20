@@ -66,7 +66,7 @@ import com.bagnolati.learnoflegends.feature.items.component.ItemCard
 import com.bagnolati.learnoflegends.feature.items.component.ItemDetailDialog
 import com.bagnolati.learnoflegends.feature.items.component.SortInfoRow
 import com.bagnolati.learnoflegends.feature.items.component.SortItemRow
-import com.bagnolati.nutrigood.core.domain.mapper.capitalize
+import com.bagnolati.learnoflegends.core.domain.mapper.capitalize
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
@@ -85,7 +85,7 @@ internal fun ItemsRoute(
         onSearchQueryChange = viewModel::onSearchQueryChange,
         onConfirmDialogError = viewModel::fetchItems,
         onSelectSort = viewModel::selectSort,
-        onClickItem = viewModel::selectItem
+        selectItem = viewModel::selectItem
     )
 
 }
@@ -98,7 +98,7 @@ internal fun ItemsScreen(
     onSearchQueryChange: (String) -> Unit,
     onConfirmDialogError: () -> Unit,
     onSelectSort: (ItemsSort) -> Unit,
-    onClickItem: (Item) -> Unit
+    selectItem: (Item) -> Unit
 ) {
     val density = LocalDensity.current
 
@@ -114,7 +114,7 @@ internal fun ItemsScreen(
         derivedStateOf { lazyItemsState.isScrollInProgress }
     }
 
-    val categories = listOf<Category>(
+    val categories = listOf(
         CONSUMABLE,
         DISTRIBUTED,
         TRINKET,
@@ -141,11 +141,8 @@ internal fun ItemsScreen(
 
         when (itemsUiState) {
             is ItemsUiState.Success -> {
-
                 val cellSize = 48.dp
-
                 Column {
-
                     AnimatedVisibility(
                         visible = itemsUiState.sort != ItemsSort.DEFAULT
                     ) {
@@ -168,20 +165,19 @@ internal fun ItemsScreen(
                             top = MaterialTheme.spacing.verticalContent,
                         )
                     ) {
-
                         categories.onEach { category ->
-
                             categorySection(
                                 category = category,
-                                itemsUiState = itemsUiState,
-                                celleSize = cellSize,
+                                sort = itemsUiState.sort,
                                 onClickItem = {
-                                    onClickItem(it)
+                                    selectItem(it)
                                     openItemDialog = true
-                                }
+                                },
+                                items = itemsUiState.items.filter { it.category == category },
+                                celleSize = cellSize,
                             )
-
                         }
+
                     }
 
                 }
@@ -210,7 +206,10 @@ internal fun ItemsScreen(
                         onSubmitKeyboard = {
                             openSearchRow = false
                             onSearchQueryChange("")
-                            // TODO navigate to itemDetail
+                            itemsUiState.items.firstOrNull()?.let { item ->
+                                selectItem(item)
+                                openItemDialog = true
+                            }
                         }
                     )
 
@@ -308,7 +307,10 @@ private fun SortLazyColumn(
             MaterialTheme.spacing.contentLazyColum
         )
     ) {
-        itemsIndexed(itemsSort) { index, sort ->
+        itemsIndexed(
+            itemsSort,
+            key = { _, items -> items.ordinal }
+        ) { index, sort ->
             if (index != 0) Divider()
             SortItemRow(
                 selected = selectedSort == sort,
@@ -361,19 +363,19 @@ fun LazyGridScope.header(
 
 fun LazyGridScope.categorySection(
     category: Category,
-    itemsUiState: ItemsUiState.Success,
+    items: List<Item>,
+    sort: ItemsSort,
     celleSize: Dp,
     onClickItem: (Item) -> Unit
 ) {
     val title = category.name.capitalize()
-    val categoryItems = itemsUiState.items.filter { it.category == category }
 
-    if (categoryItems.isNotEmpty()) {
+    if (items.isNotEmpty()) {
 
         header(title)
         itemsList(
-            items = categoryItems,
-            sort = itemsUiState.sort,
+            items = items,
+            sort = sort,
             cellSize = celleSize,
             onClickItem = onClickItem
         )
@@ -395,13 +397,13 @@ private fun ItemScreenPreview(
                 itemsUiState = ItemsUiState.Success(
                     items = items,
                     searchQuery = "",
-                    sort = ItemsSort.FLAT_ARMOR,
+                    sort = ItemsSort.ARMOR,
                     selectedItem = items.first()
                 ),
                 onSearchQueryChange = {},
                 onConfirmDialogError = {},
                 onSelectSort = {},
-                onClickItem = {}
+                selectItem = {}
             )
         }
     }
