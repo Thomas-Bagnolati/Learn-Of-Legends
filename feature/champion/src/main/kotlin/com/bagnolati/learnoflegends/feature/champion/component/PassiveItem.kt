@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.core.ui.theme.spacing
+import com.bagnolati.learnoflegends.core.ui.util.fromHtmlToAnnotatedString
 
 
 @Composable
@@ -56,13 +57,13 @@ fun PassiveItem(
                 )
                 Spacer(modifier = Modifier.width(spacing.medium))
                 Text(
-                    text = passive.name,
+                    text = passive.name.fromHtmlToAnnotatedString(),
                     style = MaterialTheme.typography.titleMedium,
                 )
             }
             Spacer(modifier = Modifier.height(spacing.medium))
             Text(
-                text = passive.description,
+                text = passive.description.fromHtmlToAnnotatedString(),
                 style = MaterialTheme.typography.bodyMedium
             )
         }
