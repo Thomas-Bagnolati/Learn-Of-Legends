@@ -25,9 +25,9 @@ import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.core.ui.theme.spacing
 
 /**
- * Is a Search View, it's a combination between [FloatingActionButton] 
+ * Is a Search View, it's a combination between [FloatingActionButton]
  * and [OutlinedTextField]
- * 
+ *
  * @param opened The state of the [SearchRowSection]
  * @param onClick The click on the [FloatingActionButton]
  */

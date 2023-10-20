@@ -3,10 +3,10 @@ package com.bagnolati.learnoflegends.feature.champions
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bagnolati.learnoflegends.core.common.result.Result
+import com.bagnolati.learnoflegends.core.domain.GetChampionsUseCase
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.feature.champions.component.ChampionOrder
 import com.bagnolati.learnoflegends.feature.champions.component.getStatByOrder
-import com.bagnolati.nutrigood.core.domain.GetChampionsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

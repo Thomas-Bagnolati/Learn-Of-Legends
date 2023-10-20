@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.bagnolati.learnoflegends.core.model.Champion
 import com.bagnolati.learnoflegends.core.ui.component.DynamicAsyncImage
 import com.bagnolati.learnoflegends.core.ui.preview.ChampionsPreviewParameterProvider
@@ -179,7 +180,7 @@ private fun TagRow(tag: Champion.Tag) {
 @Composable
 private fun ChampionImage(champion: Champion) {
     val imageShape = MaterialTheme.shapes.extraLarge
-    DynamicAsyncImage(
+    AsyncImage(
         modifier = Modifier
             .size(80.dp)
             .border(
@@ -188,7 +189,7 @@ private fun ChampionImage(champion: Champion) {
                 shape = imageShape
             )
             .clip(imageShape),
-        imageUrl = champion.imageUrl.square,
+        model = champion.imageUrl.square,
         placeholder = painterResource(id = uiR.drawable.ic_champion_placeholder),
         contentDescription = null
     )

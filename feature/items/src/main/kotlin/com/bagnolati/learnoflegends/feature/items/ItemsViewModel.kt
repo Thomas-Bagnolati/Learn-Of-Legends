@@ -3,8 +3,8 @@ package com.bagnolati.learnoflegends.feature.items
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bagnolati.learnoflegends.core.common.result.Result
+import com.bagnolati.learnoflegends.core.domain.GetItemsUseCase
 import com.bagnolati.learnoflegends.core.model.Item
-import com.bagnolati.nutrigood.core.domain.GetItemsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -13,4 +13,5 @@ class LolApplication : Application(), ImageLoaderFactory {
     lateinit var imageLoader: Provider<ImageLoader>
 
     override fun newImageLoader(): ImageLoader = imageLoader.get()
+
 }

@@ -17,6 +17,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -24,11 +25,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.bagnolati.learnoflegends.core.model.Item
-import com.bagnolati.learnoflegends.core.ui.R
 import com.bagnolati.learnoflegends.core.ui.preview.ItemsPreviewParameterProvider
 import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.core.ui.util.asTextNumber
+import com.bagnolati.learnoflegends.feature.items.R
+import com.bagnolati.learnoflegends.core.ui.R as uiR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,9 +44,7 @@ fun ItemCard(
 ) {
     Card(
         modifier = modifier,
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp
-        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
         shape = RoundedCornerShape(6.dp),
         onClick = { onClick(item) },
     ) {
@@ -54,19 +54,20 @@ fun ItemCard(
             ) {
 
                 AsyncImage(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize(),
                     model = item.image.full,
                     contentDescription = null,
-                    placeholder = painterResource(id = R.drawable.ic_default_placeholder)
+                    placeholder = painterResource(id = uiR.drawable.ic_default_placeholder),
+                    contentScale = ContentScale.Crop
                 )
 
                 if (item.category == Item.Category.ORNN)
                     Image(
                         modifier = Modifier.fillMaxSize(),
-                        painter = painterResource(id = com.bagnolati.learnoflegends.feature.items.R.drawable.item_ornn_border),
+                        painter = painterResource(id = R.drawable.item_ornn_border),
                         contentDescription = null
                     )
-
             }
             if (showValue)
                 Text(
