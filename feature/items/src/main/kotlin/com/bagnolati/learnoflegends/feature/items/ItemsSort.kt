@@ -3,13 +3,36 @@ package com.bagnolati.learnoflegends.feature.items
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import com.bagnolati.learnoflegends.core.model.Item
-import com.bagnolati.learnoflegends.feature.items.ItemsSort.*
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.ABILITY_HASTE
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.ABILITY_POWER
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.ARMOR
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.DEFAULT
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.GOLD
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.GOLD_PER_10_SECONDS
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.HEALTH
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.LETHALITY
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.MAGIC_RESIST
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.MANA
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.MOVE_SPEED
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.PERCENT_ARMOR_PENETRATION
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.PERCENT_ATTACK_SPEED
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.PERCENT_BASE_HEALTH_REGEN
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.PERCENT_BASE_MANA_REGEN
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.PERCENT_CRIT_CHANCE
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.PERCENT_CRIT_DAMAGE
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.PERCENT_HEAL_AND_SHIELD_POWER
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.PERCENT_LIFESTEAL
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.PERCENT_MAGIC_PENETRATION
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.PERCENT_MOVE_SPEED
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.PERCENT_OMNIVAMP
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.PERCENT_TENACITY
+import com.bagnolati.learnoflegends.feature.items.ItemsSort.PHYSICAL_DAMAGE
 import com.bagnolati.learnoflegends.core.ui.R as uiR
 
 enum class ItemsSort(
     @StringRes val titleRes: Int,
     @DrawableRes val icon: Int?,
-    val iconVisibleOnDark : Boolean = true
+    val iconVisibleOnDark: Boolean = true
 ) {
     // Base
     DEFAULT(titleRes = R.string.sort_default, null),
@@ -24,7 +47,7 @@ enum class ItemsSort(
     PHYSICAL_DAMAGE(titleRes = R.string.sort_physical_damage, icon = uiR.drawable.stat_attack_damage_icon),
     PERCENT_ATTACK_SPEED(titleRes = R.string.sort_attack_speed, icon = uiR.drawable.stat_attack_speed_icon),
     PERCENT_CRIT_CHANCE(titleRes = R.string.sort_percent_crit_chance, icon = uiR.drawable.stat_crit_chance_icon),
-    PERCENT_CRIT_DAMAGE(titleRes = R.string.sort_percent_crit_damage,icon = uiR.drawable.stat_crit_damage_icon, false),
+    PERCENT_CRIT_DAMAGE(titleRes = R.string.sort_percent_crit_damage, icon = uiR.drawable.stat_crit_damage_icon, false),
 
     // Penetration
     LETHALITY(titleRes = R.string.sort_lethality, icon = uiR.drawable.stat_armor_pen_icon),
@@ -36,16 +59,20 @@ enum class ItemsSort(
     MAGIC_RESIST(titleRes = R.string.sort_magic_resist, icon = uiR.drawable.stat_magic_res_icon),
 
     // Regeneration and Sustainability
-    PERCENT_BASE_HEALTH_REGEN(titleRes = R.string.sort_percent_base_health_regen,icon = uiR.drawable.stat_base_health_regen_icon),
+    PERCENT_BASE_HEALTH_REGEN(titleRes = R.string.sort_percent_base_health_regen, icon = uiR.drawable.stat_base_health_regen_icon),
     PERCENT_BASE_MANA_REGEN(titleRes = R.string.sort_percent_base_mana_regen, icon = uiR.drawable.stat_base_mana_regen_icon),
     PERCENT_OMNIVAMP(titleRes = R.string.sort_percent_omnivamp, icon = uiR.drawable.stat_omnivamp_icon),
     PERCENT_LIFESTEAL(titleRes = R.string.sort_lifesteal, icon = uiR.drawable.stat_lifesteal_icon),
-    PERCENT_HEAL_AND_SHIELD_POWER(titleRes = R.string.sort_percent_heal_and_shield_power, icon = uiR.drawable.stat_heal_and_shield_power_icon, false),
+    PERCENT_HEAL_AND_SHIELD_POWER(
+        titleRes = R.string.sort_percent_heal_and_shield_power,
+        icon = uiR.drawable.stat_heal_and_shield_power_icon,
+        false
+    ),
 
     // Utility
     MOVE_SPEED(titleRes = R.string.sort_move_speed, icon = uiR.drawable.stat_move_speed_icon, false),
     PERCENT_MOVE_SPEED(titleRes = R.string.sort_percent_move_speed, icon = uiR.drawable.stat_move_speed_icon, false),
-    ABILITY_HASTE(titleRes = R.string.sort_ability_haste, icon = uiR.drawable.stat_ability_haste_icon,false),
+    ABILITY_HASTE(titleRes = R.string.sort_ability_haste, icon = uiR.drawable.stat_ability_haste_icon, false),
     PERCENT_TENACITY(titleRes = R.string.sort_percent_tenacity, icon = uiR.drawable.stat_tenacity_icon),
     GOLD_PER_10_SECONDS(titleRes = R.string.sort_gold_per_10_seconds, icon = uiR.drawable.gold_icon),
 

@@ -50,6 +50,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bagnolati.learnoflegends.core.domain.mapper.capitalize
 import com.bagnolati.learnoflegends.core.model.Item
 import com.bagnolati.learnoflegends.core.model.Item.Category
 import com.bagnolati.learnoflegends.core.model.Item.Category.*
@@ -66,7 +67,6 @@ import com.bagnolati.learnoflegends.feature.items.component.ItemCard
 import com.bagnolati.learnoflegends.feature.items.component.ItemDetailDialog
 import com.bagnolati.learnoflegends.feature.items.component.SortInfoRow
 import com.bagnolati.learnoflegends.feature.items.component.SortItemRow
-import com.bagnolati.learnoflegends.core.domain.mapper.capitalize
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds

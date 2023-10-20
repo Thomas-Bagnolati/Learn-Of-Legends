@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import com.bagnolati.learnoflegends.core.model.Champion
@@ -27,7 +26,6 @@ import com.bagnolati.learnoflegends.core.ui.preview.ChampionsPreviewParameterPro
 import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
 import com.bagnolati.learnoflegends.core.ui.theme.LolTheme
 import com.bagnolati.learnoflegends.core.ui.theme.spacing
-import com.bagnolati.learnoflegends.feature.champion.R
 
 
 @Composable

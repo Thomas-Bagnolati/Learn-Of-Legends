@@ -4,7 +4,6 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.bagnolati.learnoflegends.core.model.Item
 
 
-
 const val DraktharrPreviewIndex = 0
 const val manamunePreviewIndex = 1
 
