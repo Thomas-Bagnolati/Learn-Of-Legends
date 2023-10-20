@@ -17,8 +17,8 @@ class ItemsPreviewParameterProvider : PreviewParameterProvider<List<Item>> {
             listOf(
                 PreviewParameterItems.draktharrItem,
                 PreviewParameterItems.manamuneItem,
-                PreviewParameterItems.draktharrItem,
-                PreviewParameterItems.manamuneItem,
+                PreviewParameterItems.draktharrItem.copy(id = 3),
+                PreviewParameterItems.manamuneItem.copy(id = 4),
             )
         )
 }
