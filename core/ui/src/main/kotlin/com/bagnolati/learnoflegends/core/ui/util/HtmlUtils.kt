@@ -54,7 +54,6 @@ import com.bagnolati.learnoflegends.core.model.HtmlTag.STATUS
 import com.bagnolati.learnoflegends.core.model.HtmlTag.TRUE_DAMAGE
 import com.bagnolati.learnoflegends.core.model.HtmlTag.UNDERLINE
 import com.bagnolati.learnoflegends.core.model.HtmlTag.UNIQUE
-import com.bagnolati.learnoflegends.core.model.HtmlTag.values
 import com.bagnolati.learnoflegends.core.model.closeTag
 import com.bagnolati.learnoflegends.core.model.openTag
 import com.bagnolati.learnoflegends.core.ui.theme.colorBlue
@@ -80,7 +79,7 @@ import com.bagnolati.learnoflegends.core.ui.theme.colorYellow
 fun String.fromHtmlToAnnotatedString(): AnnotatedString {
     var text = this@fromHtmlToAnnotatedString
 
-    values().forEach { tag ->
+    HtmlTag.values().forEach { tag ->
         var addBold = false
         var addItalic = false
         var addUnderLine = false

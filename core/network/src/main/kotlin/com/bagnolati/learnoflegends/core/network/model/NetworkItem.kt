@@ -18,7 +18,7 @@ data class NetworkItem(
     val plaintext: String,
     val stats: NetworkStats,
     val tags: List<String>,
-    val depth: Int? = null
+    val depth: Int? = null,
 ) {
 
     @Serializable
