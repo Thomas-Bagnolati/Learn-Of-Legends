@@ -147,7 +147,7 @@ private fun Presentation(
             .padding(vertical = MaterialTheme.spacing.medium),
     ) {
         Text(
-            text = champion.name.fromHtmlToAnnotatedString(),
+            text = champion.name,
             style = MaterialTheme.typography.headlineLarge,
             modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center
         )

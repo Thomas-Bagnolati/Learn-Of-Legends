@@ -80,7 +80,7 @@ data class Champion(
         val range: List<Int>,
         val rangeBurn: String?,
         val image: ImageUrl,
-        val resource: String
+        val resource: String? = null
     ) {
         data class LevelTip(
             val label: List<String>?,
