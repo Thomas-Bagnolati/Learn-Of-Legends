@@ -114,23 +114,6 @@ internal fun ItemsScreen(
         derivedStateOf { lazyItemsState.isScrollInProgress }
     }
 
-    val categories = listOf(
-        CONSUMABLE,
-        DISTRIBUTED,
-        TRINKET,
-        JUNGLE,
-        STARTER,
-        BOOT,
-        BASIC,
-        EPIC,
-        LEGENDARY,
-        MYTHIC,
-        ORNN,
-        EXCLUSIVE,
-        MINIONS_TURRET
-    )
-
-
     // Collapse floating action button on scroll
     LaunchedEffect(isScrollInProgress) {
         if (!isScrollInProgress) delay(3.seconds)
@@ -148,6 +131,37 @@ internal fun ItemsScreen(
                     ) {
                         SortInfoRow(itemsUiState.sort)
                     }
+
+                    val categories = listOf(
+                        CONSUMABLE,
+                        DISTRIBUTED,
+                        TRINKET,
+                        JUNGLE,
+                        STARTER,
+                        BOOT,
+                        BASIC,
+                        EPIC,
+                        LEGENDARY,
+                        MYTHIC,
+                        ORNN,
+                        EXCLUSIVE,
+                        MINIONS_TURRET
+                    )
+
+                    // Filter all items before for better performances
+                    val consumableItems = remember(itemsUiState.items) { itemsUiState.items.filter { it.category == CONSUMABLE } }
+                    val distributedItems = remember(itemsUiState.items) { itemsUiState.items.filter { it.category == DISTRIBUTED } }
+                    val trinketItems = remember(itemsUiState.items) { itemsUiState.items.filter { it.category == TRINKET } }
+                    val jungleItems = remember(itemsUiState.items) { itemsUiState.items.filter { it.category == JUNGLE } }
+                    val starterItems = remember(itemsUiState.items) { itemsUiState.items.filter { it.category == STARTER } }
+                    val bootItems = remember(itemsUiState.items) { itemsUiState.items.filter { it.category == BOOT } }
+                    val basicItems = remember(itemsUiState.items) { itemsUiState.items.filter { it.category == BASIC } }
+                    val epicItems = remember(itemsUiState.items) { itemsUiState.items.filter { it.category == EPIC } }
+                    val legendaryItems = remember(itemsUiState.items) { itemsUiState.items.filter { it.category == LEGENDARY } }
+                    val mythicItems = remember(itemsUiState.items) { itemsUiState.items.filter { it.category == MYTHIC } }
+                    val ornnItems = remember(itemsUiState.items) { itemsUiState.items.filter { it.category == ORNN } }
+                    val exclusiveItems = remember(itemsUiState.items) { itemsUiState.items.filter { it.category == EXCLUSIVE } }
+                    val minionsTurretItems = remember(itemsUiState.items) { itemsUiState.items.filter { it.category == MINIONS_TURRET } }
 
                     LazyVerticalGrid(
                         modifier = Modifier
@@ -173,7 +187,22 @@ internal fun ItemsScreen(
                                     selectItem(it)
                                     openItemDialog = true
                                 },
-                                items = itemsUiState.items.filter { it.category == category },
+                                items = when (category) {
+                                    STARTER -> starterItems
+                                    CONSUMABLE -> consumableItems
+                                    JUNGLE -> jungleItems
+                                    TRINKET -> trinketItems
+                                    DISTRIBUTED -> distributedItems
+                                    BOOT -> bootItems
+                                    BASIC -> basicItems
+                                    EPIC -> epicItems
+                                    LEGENDARY -> legendaryItems
+                                    MYTHIC -> mythicItems
+                                    ORNN -> ornnItems
+                                    EXCLUSIVE -> exclusiveItems
+                                    MINIONS_TURRET -> minionsTurretItems
+                                    else -> emptyList<Item>()
+                                },
                                 celleSize = cellSize,
                             )
                         }
