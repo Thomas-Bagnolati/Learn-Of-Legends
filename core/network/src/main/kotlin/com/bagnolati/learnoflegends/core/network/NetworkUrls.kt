@@ -7,7 +7,7 @@ package com.bagnolati.learnoflegends.core.network
  * See [documentation](https://developer.riotgames.com/docs/lol)
  */
 object DdragonUrl {
-    private const val VERSION = "13.20.1"
+    private const val VERSION = "13.21.1"
 
     //    private const val BASE_URL = BuildConfig.DDRAGON_BASE_URL
     private const val BASE_URL = "https://ddragon.leagueoflegends.com/"
