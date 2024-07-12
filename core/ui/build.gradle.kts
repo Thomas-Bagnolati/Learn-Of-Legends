@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.learnoflegends.android.library)
-    alias(libs.plugins.learnoflegends.android.libraryCompose)
+    alias(libs.plugins.learnoflegends.android.library.compose)
 }
 
 android {
@@ -18,9 +18,9 @@ dependencies {
     api(libs.androidx.compose.runtime)
     api(libs.androidx.compose.ui.tooling.preview)
     api(libs.androidx.compose.ui.util)
+    api(libs.coil.kt.compose)
 
     debugApi(libs.androidx.compose.ui.tooling)
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.coil.kt.compose)
 }

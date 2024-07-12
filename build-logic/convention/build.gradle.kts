@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -12,55 +13,57 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
 }
-tasks.withType<KotlinCompile>().configureEach {
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString()
+
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
     }
 }
 
 
 dependencies {
     compileOnly(libs.android.gradlePlugin)
+    compileOnly(libs.android.tools.common)
+    compileOnly(libs.compose.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
-    compileOnly(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
+}
+
+tasks {
+    validatePlugins {
+        enableStricterValidation = true
+        failOnWarning = true
+    }
 }
 
 gradlePlugin {
     plugins {
-
-        register("androidApplication") {
-            id = libs.plugins.learnoflegends.android.application.get().pluginId
-            implementationClass = "AndroidApplicationConventionPlugin"
-        }
-
         register("androidApplicationCompose") {
-            id = libs.plugins.learnoflegends.android.applicationCompose.get().pluginId
+            id = "learnoflegends.android.application.compose"
             implementationClass = "AndroidApplicationComposeConventionPlugin"
         }
-
-        register("androidLibrary") {
-            id = libs.plugins.learnoflegends.android.library.get().pluginId
-            implementationClass = "AndroidLibraryConventionPlugin"
+        register("androidApplication") {
+            id = "learnoflegends.android.application"
+            implementationClass = "AndroidApplicationConventionPlugin"
         }
-
         register("androidLibraryCompose") {
-            id = libs.plugins.learnoflegends.android.libraryCompose.get().pluginId
+            id = "learnoflegends.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
-
+        register("androidLibrary") {
+            id = "learnoflegends.android.library"
+            implementationClass = "AndroidLibraryConventionPlugin"
+        }
         register("androidFeature") {
-            id = libs.plugins.learnoflegends.android.feature.get().pluginId
+            id = "learnoflegends.android.feature"
             implementationClass = "AndroidFeatureConventionPlugin"
         }
-
         register("androidHilt") {
-            id = libs.plugins.learnoflegends.android.hilt.get().pluginId
+            id = "learnoflegends.android.hilt"
             implementationClass = "AndroidHiltConventionPlugin"
         }
-
         register("jvmLibrary") {
-            id = libs.plugins.learnoflegends.jvm.library.get().pluginId
+            id = "learnoflegends.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
         }
     }

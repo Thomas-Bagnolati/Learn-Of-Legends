@@ -1,10 +1,8 @@
-@file:Suppress("UnstableApiUsage")
-
-import com.bagnolati.learnoflegends.ProjectBuildType
+import com.bagnolati.learnoflegends.LolBuildType
 
 plugins {
     alias(libs.plugins.learnoflegends.android.application)
-    alias(libs.plugins.learnoflegends.android.applicationCompose)
+    alias(libs.plugins.learnoflegends.android.application.compose)
     alias(libs.plugins.learnoflegends.android.hilt)
 }
 
@@ -12,8 +10,8 @@ android {
     defaultConfig {
         applicationId = "com.bagnolati.learnoflegends"
 
-        versionCode = 5
-        versionName = "1.2.1" // X.Y.Z; X = Major, Y = minor, Z = Patch level
+        versionCode = 6
+        versionName = "1.3.0" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -23,14 +21,13 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix = ProjectBuildType.DEBUG.applicationIdSuffix
+            applicationIdSuffix = LolBuildType.DEBUG.applicationIdSuffix
             signingConfig = signingConfigs.getByName("debug")
         }
         release {
-            applicationIdSuffix = ProjectBuildType.RELEASE.applicationIdSuffix
+            applicationIdSuffix = LolBuildType.RELEASE.applicationIdSuffix
             isMinifyEnabled = true
             isShrinkResources = true
-            isDebuggable = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             // SignIn is done on GitHub workflow to hide keys.
         }
@@ -58,15 +55,20 @@ dependencies {
     implementation(projects.core.ui)
 
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.compose.material3.windowSizeClass)
-    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.window.manager)
+    implementation(libs.androidx.profileinstaller)
+    implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
 
+    ksp(libs.hilt.compiler)
+
+    debugImplementation(libs.androidx.compose.ui.testManifest)
+}
+
+dependencyGuard {
+    configuration("prodReleaseRuntimeClasspath")
 }

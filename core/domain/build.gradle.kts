@@ -1,8 +1,6 @@
-import dsl.ksp
-
 plugins {
     alias(libs.plugins.learnoflegends.android.library)
-    id(libs.plugins.ksp.get().pluginId)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -10,12 +8,8 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.common)
-    implementation(projects.core.data)
-    implementation(projects.core.model)
-    implementation(projects.core.network)
+    api(projects.core.data)
+    api(projects.core.model)
 
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
+    implementation(libs.javax.inject)
 }
