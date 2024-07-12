@@ -1,10 +1,8 @@
-@file:Suppress("UnstableApiUsage")
-
-import com.bagnolati.learnoflegends.ProjectBuildType
+import com.bagnolati.learnoflegends.LolBuildType
 
 plugins {
     alias(libs.plugins.learnoflegends.android.application)
-    alias(libs.plugins.learnoflegends.android.applicationCompose)
+    alias(libs.plugins.learnoflegends.android.application.compose)
     alias(libs.plugins.learnoflegends.android.hilt)
 }
 
@@ -23,11 +21,11 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix = ProjectBuildType.DEBUG.applicationIdSuffix
+            applicationIdSuffix = LolBuildType.DEBUG.applicationIdSuffix
             signingConfig = signingConfigs.getByName("debug")
         }
         release {
-            applicationIdSuffix = ProjectBuildType.RELEASE.applicationIdSuffix
+            applicationIdSuffix = LolBuildType.RELEASE.applicationIdSuffix
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -57,15 +55,20 @@ dependencies {
     implementation(projects.core.ui)
 
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)
-    implementation(libs.androidx.compose.runtime)
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.compose.material3.windowSizeClass)
-    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.window.manager)
+    implementation(libs.androidx.profileinstaller)
+    implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
 
+    ksp(libs.hilt.compiler)
+
+    debugImplementation(libs.androidx.compose.ui.testManifest)
+}
+
+dependencyGuard {
+    configuration("prodReleaseRuntimeClasspath")
 }

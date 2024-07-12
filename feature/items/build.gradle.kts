@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.learnoflegends.android.feature)
-    alias(libs.plugins.learnoflegends.android.libraryCompose)
+    alias(libs.plugins.learnoflegends.android.library.compose)
 }
 
 android {
@@ -8,6 +8,6 @@ android {
 }
 
 dependencies {
-
-    implementation(libs.material)
+    implementation(projects.core.data)
+    implementation(projects.core.domain)
 }
