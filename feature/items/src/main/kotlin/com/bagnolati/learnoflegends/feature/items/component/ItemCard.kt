@@ -18,12 +18,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.bagnolati.learnoflegends.core.model.Item
 import com.bagnolati.learnoflegends.core.ui.preview.ItemsPreviewParameterProvider
 import com.bagnolati.learnoflegends.core.ui.preview.ThemePreviews
@@ -56,7 +58,11 @@ fun ItemCard(
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxSize(),
-                    model = item.image.full,
+                    model =
+                    ImageRequest.Builder(LocalContext.current)
+                        .data(item.image.full)
+                        .crossfade(true)
+                        .build(),
                     contentDescription = null,
                     placeholder = painterResource(id = uiR.drawable.ic_default_placeholder),
                     contentScale = ContentScale.Crop

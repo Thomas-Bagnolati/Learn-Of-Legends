@@ -10,8 +10,8 @@ android {
     defaultConfig {
         applicationId = "com.bagnolati.learnoflegends"
 
-        versionCode = 5
-        versionName = "1.2.1" // X.Y.Z; X = Major, Y = minor, Z = Patch level
+        versionCode = 6
+        versionName = "1.3.0" // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
