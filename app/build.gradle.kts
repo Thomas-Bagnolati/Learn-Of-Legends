@@ -30,7 +30,6 @@ android {
             applicationIdSuffix = ProjectBuildType.RELEASE.applicationIdSuffix
             isMinifyEnabled = true
             isShrinkResources = true
-            isDebuggable = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             // SignIn is done on GitHub workflow to hide keys.
         }
